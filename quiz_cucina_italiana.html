@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz di Verifica — Cucina Italiana</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --parchment: #EDE5D0;
+    --warm-white: #FAF7F2;
+    --ink: #1A1208;
+    --espresso: #2C1A0E;
+    --tomato: #C0392B;
+    --tomato-dark: #96281B;
+    --sage: #5C7A5C;
+    --sage-light: #7A9E7A;
+    --gold: #B8860B;
+    --gold-light: #D4A017;
+    --terracotta: #C17F52;
+    --light-border: #D4C9B0;
+    --correct-bg: #EBF5EB;
+    --wrong-bg: #FBE9E7;
+    --review-bg: #FFF8E1;
+    --review-border: #F9A825;
+    --shadow: 0 2px 16px rgba(26,18,8,0.08);
+    --shadow-lg: 0 8px 40px rgba(26,18,8,0.13);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(193,127,82,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(92,122,92,0.05) 0%, transparent 60%);
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    flex: 1;
+    min-width: 200px;
+  }
+  .header-title span { color: var(--gold-light); }
+  .score-badge {
+    background: var(--gold);
+    color: var(--espresso);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .progress-bar-wrap {
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.15);
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-light), var(--terracotta));
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* ── STICKY CONTROLS ── */
+  .controls-bar {
+    background: var(--parchment);
+    border-bottom: 1px solid var(--light-border);
+    position: sticky;
+    top: 62px;
+    z-index: 90;
+  }
+  .controls-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .ctrl-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--light-border);
+    background: var(--warm-white);
+    color: var(--espresso);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .ctrl-btn:hover { background: var(--espresso); color: var(--cream); border-color: var(--espresso); }
+  .ctrl-btn.danger:hover { background: var(--tomato); border-color: var(--tomato); color: #fff; }
+  .filter-label { font-size: 0.78rem; color: #888; margin-left: auto; }
+  .filter-select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border: 1.5px solid var(--light-border);
+    border-radius: 20px;
+    background: var(--warm-white);
+    color: var(--espresso);
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* ── CHAPTER DIVIDERS ── */
+  .chapter-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 48px 0 28px;
+  }
+  .chapter-header:first-child { margin-top: 0; }
+  .chapter-line { flex: 1; height: 1px; background: var(--light-border); }
+  .chapter-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    white-space: nowrap;
+  }
+  .chapter-title {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--espresso);
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .chapter-subtitle {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #999;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  /* ── QUESTION CARDS ── */
+  .question-card {
+    background: var(--warm-white);
+    border: 1px solid var(--light-border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, border-color 0.2s;
+    position: relative;
+    scroll-margin-top: 130px;
+  }
+  .question-card.answered-correct {
+    border-color: var(--sage-light);
+    background: var(--correct-bg);
+  }
+  .question-card.answered-wrong {
+    border-color: #e57373;
+    background: var(--wrong-bg);
+  }
+  .question-card.marked {
+    border-left: 4px solid var(--review-border);
+  }
+  .question-card.hidden { display: none; }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .q-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--terracotta);
+    background: rgba(193,127,82,0.12);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .q-type-badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #aaa;
+  }
+  .mark-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.4;
+    transition: opacity 0.2s, transform 0.2s;
+    padding: 2px;
+    line-height: 1;
+  }
+  .mark-btn:hover, .mark-btn.active { opacity: 1; transform: scale(1.2); }
+  .mark-btn.active { color: var(--review-border); }
+
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.0rem;
+    line-height: 1.55;
+    color: var(--espresso);
+    margin-bottom: 18px;
+    font-weight: 400;
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 9px; }
+
+  .option-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--cream);
+    border: 1.5px solid var(--light-border);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--ink);
+    transition: all 0.18s;
+    width: 100%;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--terracotta);
+    background: rgba(193,127,82,0.07);
+  }
+  .option-btn .opt-letter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--parchment);
+    border-radius: 5px;
+    padding: 2px 7px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: background 0.18s, color 0.18s;
+  }
+  .option-btn.correct {
+    background: #d4edda;
+    border-color: var(--sage);
+    color: #1a3c1a;
+  }
+  .option-btn.correct .opt-letter { background: var(--sage); color: #fff; }
+  .option-btn.wrong {
+    background: #fde8e8;
+    border-color: var(--tomato);
+    color: #6b1212;
+  }
+  .option-btn.wrong .opt-letter { background: var(--tomato); color: #fff; }
+  .option-btn:disabled { cursor: default; }
+  .option-btn .opt-icon { margin-left: auto; font-size: 1rem; flex-shrink: 0; }
+
+  /* ── VERO/FALSO ── */
+  .vf-options { display: flex; gap: 12px; }
+  .vf-btn {
+    flex: 1;
+    padding: 13px;
+    border: 1.5px solid var(--light-border);
+    border-radius: 8px;
+    background: var(--cream);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: all 0.18s;
+    text-align: center;
+  }
+  .vf-btn:hover:not(:disabled) {
+    border-color: var(--terracotta);
+    background: rgba(193,127,82,0.07);
+  }
+  .vf-btn.correct { background: #d4edda; border-color: var(--sage); color: #1a3c1a; }
+  .vf-btn.wrong { background: #fde8e8; border-color: var(--tomato); color: #6b1212; }
+  .vf-btn:disabled { cursor: default; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    margin-top: 14px;
+    padding: 13px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    display: none;
+    animation: fadeSlide 0.3s ease;
+  }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(92,122,92,0.12);
+    border: 1px solid rgba(92,122,92,0.3);
+    color: #2a4a2a;
+  }
+  .feedback.wrong-fb {
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.25);
+    color: #5c1a10;
+  }
+  .feedback strong { font-weight: 600; display: block; margin-bottom: 5px; }
+  .feedback .correct-answer {
+    font-weight: 600;
+    color: var(--sage);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  /* ── RESULTS PANEL ── */
+  #results-panel {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,18,8,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  #results-panel.show { display: flex; }
+  .results-box {
+    background: var(--warm-white);
+    border-radius: 16px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 40px 36px;
+    box-shadow: var(--shadow-lg);
+    animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .results-emoji { font-size: 3rem; text-align: center; margin-bottom: 10px; }
+  .results-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    text-align: center;
+    color: var(--espresso);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .results-score-big {
+    font-family: 'DM Mono', monospace;
+    font-size: 3.5rem;
+    font-weight: 500;
+    text-align: center;
+    color: var(--tomato);
+    line-height: 1;
+    margin: 16px 0;
+  }
+  .results-score-big.good { color: var(--sage); }
+  .results-score-big.ok { color: var(--gold); }
+  .results-sub { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 24px; }
+  .results-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .breakdown-item {
+    background: var(--parchment);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .breakdown-item .bi-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 500;
+    display: block;
+  }
+  .breakdown-item .bi-label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.06em; }
+  .breakdown-item.green .bi-num { color: var(--sage); }
+  .breakdown-item.red .bi-num { color: var(--tomato); }
+  .breakdown-item.yellow .bi-num { color: var(--gold); }
+  .results-chapter {
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    background: var(--cream);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+  }
+  .results-chapter span { font-weight: 600; }
+  .ch-score { font-family: 'DM Mono', monospace; }
+  .results-actions { display: flex; gap: 12px; margin-top: 20px; }
+  .res-btn {
+    flex: 1;
+    padding: 13px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .res-btn.primary { background: var(--espresso); color: var(--cream); }
+  .res-btn.primary:hover { background: var(--tomato); }
+  .res-btn.secondary { background: var(--parchment); color: var(--espresso); }
+  .res-btn.secondary:hover { background: var(--light-border); }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 300;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── MISC ── */
+  .answered-stamp {
+    position: absolute;
+    top: 18px; right: 56px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+  .answered-stamp.ok { color: var(--sage); }
+  .answered-stamp.ko { color: var(--tomato); }
+
+  @media (max-width: 600px) {
+    .question-card { padding: 18px 16px; }
+    .results-breakdown { grid-template-columns: 1fr 1fr; }
+    .header-inner { gap: 10px; }
+    main { padding: 20px 14px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-title">Quiz <span>Cucina Italiana</span></div>
+    <div class="score-badge" id="score-badge">0 / 0</div>
+    <button class="ctrl-btn" onclick="showResults()" style="background:var(--gold);border-color:var(--gold);color:var(--espresso);font-weight:600;">📊 Risultati</button>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar"></div></div>
+</header>
+
+<div class="controls-bar">
+  <div class="controls-inner">
+    <button class="ctrl-btn" onclick="filterQuestions('all')">📋 Tutte</button>
+    <button class="ctrl-btn" onclick="filterQuestions('unanswered')">⏳ Da rispondere</button>
+    <button class="ctrl-btn" onclick="filterQuestions('marked')">🔖 Segnate</button>
+    <button class="ctrl-btn" onclick="filterQuestions('wrong')">❌ Sbagliate</button>
+    <button class="ctrl-btn danger" onclick="confirmReset()">🔄 Ricomincia</button>
+  </div>
+</div>
+
+<main id="quiz-main"></main>
+
+<div id="results-panel">
+  <div class="results-box" id="results-box"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  QUIZ DATA
+// ═══════════════════════════════════════════
+const chapters = [
+  {
+    title: "Fondi di Cucina e Salse",
+    subtitle: "Capitolo 1 — Livello: Medio → Difficile",
+    qs: [
+      {n:1, type:"mc", q:"Cosa sono i fondi di cucina?", opts:["Salse madri ottenute per emulsione a freddo di grassi e acidi.","Preparazioni liquide ottenute mediante bollitura prolungata di elementi nutritivi e aromatici.","Riduzioni di vino e aceto utilizzate come base per le salse composte.","Concentrati di verdure stufate impiegati esclusivamente come condimento finale."], correct:1, exp:"I fondi di cucina sono definiti come preparazioni liquide (brodi) ottenute attraverso una bollitura più o meno prolungata di elementi nutritivi ed aromatici."},
+      {n:2, type:"mc", q:"Quale tra i seguenti NON è considerato un elemento nutritivo di un fondo?", opts:["Ossi e parature di carne.","Tagli di macelleria di 2ª/3ª scelta.","Lische e ritagli di pesce.","Erbe aromatiche e spezie."], correct:3, exp:"Gli elementi nutritivi sono ossi, parature di carne, tagli di 2ª/3ª scelta, lische e ritagli di pesce. Erbe e spezie rientrano invece tra gli elementi aromatici."},
+      {n:3, type:"vf", q:"Nei fondi bianchi non si esegue né stufatura/rosolatura degli elementi aromatici né arrostitura/tostatura degli elementi nutritivi.", correct:true, exp:"I fondi bianchi si caratterizzano proprio per l'assenza di stufatura/rosolatura delle verdure e di arrostitura/tostatura degli ossi e delle parature, con sola cottura estrattiva per bollitura."},
+      {n:4, type:"mc", q:"Quale fenomeno chimico, oltre alla concentrazione e all'eventuale caramellizzazione, è caratteristico dei fondi bruni?", opts:["La gelatinizzazione dell'amido.","La denaturazione dell'albumina.","La reazione di Maillard.","La saponificazione dei grassi."], correct:2, exp:"Nei fondi bruni, oltre a estrazione/concentrazione ed eventuale caramellizzazione, è caratteristica la reazione di Maillard, che dà colorazioni più scure e aromi più complessi."},
+      {n:5, type:"vf", q:"Il fumetto di pesce è classificato tra i fondi bianchi.", correct:false, exp:"Il fumetto di pesce è classificato tra i fondi bruni (insieme a fondo bruno di carni, fumetto di crostacei e jus vari)."},
+      {n:6, type:"mc", q:"Quali sono gli ingredienti della salsa velouté (o salsa bianca di grasso)?", opts:["Latte + roux bianco.","Fondo bianco di vitello + roux biondo.","Fondo bruno di carne + roux bruno.","Fondo bianco di pollame + roux biondo + panna."], correct:1, exp:"La salsa velouté (o salsa bianca di grasso) si ottiene da fondo bianco di vitello + roux biondo."},
+      {n:7, type:"mc", q:"La salsa suprême si ottiene da:", opts:["Fondo bianco di pesce + roux biondo + tuorlo d'uovo.","Fondo bianco di pollame + roux biondo + panna.","Fondo bruno di vitello + amido.","Latte + roux bianco + formaggio."], correct:1, exp:"La suprême è fondo bianco di pollame + roux biondo + panna."},
+      {n:8, type:"mc", q:"Quale di queste salse madri NON è ottenuta a partire da un fondo di cucina?", opts:["Salsa spagnola.","Salsa demi-glace.","Maionese.","Salsa velouté di pesce."], correct:2, exp:"La maionese, come la besciamella, la salsa al pomodoro e l'olandese, è una salsa madre NON ottenuta a partire da fondi."},
+      {n:9, type:"mc", q:"Quali sono gli ingredienti della salsa olandese?", opts:["Tuorlo d'uovo + olio + succo di limone.","Latte + roux bianco.","Tuorlo d'uovo + burro + riduzione di vino o aceto di vino bianco, scalogno e pepe + succo di limone.","Cipolla + aglio + olio extravergine d'oliva + pomodoro + aromi."], correct:2, exp:"L'olandese si ottiene con tuorlo d'uovo + burro + riduzione di vino o aceto di vino bianco, scalogno e pepe + succo di limone."},
+      {n:10, type:"vf", q:"Le salse derivate si ottengono assemblando due o più salse madri tra loro.", correct:false, exp:"Le salse derivate si ottengono da una salsa madre aggiungendo o sostituendo uno o più ingredienti. È invece la salsa composta che può ottenersi assemblando due o più salse madri e/o derivate."},
+      {n:11, type:"mc", q:"La salsa demi-glace può essere ottenuta:", opts:["Solo per riduzione di un fondo bruno di pesce.","Per riduzione di fondo bruno di carne o jus a consistenza di salsa, oppure per diluizione di glassa di carne con fondo bruno di carne.","Esclusivamente aggiungendo amido al fondo bianco di vitello.","Mescolando salsa spagnola e besciamella in parti uguali."], correct:1, exp:"La demi-glace si ottiene per riduzione (fondo bruno di carne o jus a consistenza di salsa) oppure per diluizione (glassa di carne + fondo bruno di carne)."},
+      {n:12, type:"mc", q:"Secondo la catalogazione di Escoffier, perché salsa parigina e salsa suprême — pur essendo tecnicamente derivate dalla velouté — sono considerate salse madri bianche?", opts:["Perché contengono entrambe tuorlo d'uovo come legante.","Perché si ottengono con fondi diversi dalla velouté originaria.","Per la loro estrema facilità di ottenimento, versatilità e largo utilizzo nella cucina dell'epoca.","Perché Escoffier non riconosceva la velouté come salsa madre."], correct:2, exp:"Escoffier le considerò salse madri bianche per l'estrema facilità di ottenimento dalla velouté, la versatilità e il largo utilizzo nella cucina dell'epoca, tanto da considerarle vere e proprie salse di base."},
+      {n:13, type:"mc", q:"La salsa Diplomatica deriva dalla:", opts:["Salsa Aurora.","Salsa Normanna.","Salsa Poulette.","Salsa Albufera."], correct:1, exp:"La Diplomatica deriva dalla Normanna (con burro di astice + polpa di astice + tartufo nero in brunoise). La Normanna deriva dalla velouté di pesce."},
+      {n:14, type:"mc", q:"La salsa Charcutière è una composta che parte dalla:", opts:["Salsa Robert (che a sua volta deriva dalla demi-glace).","Salsa Poivrade (che a sua volta deriva dalla spagnola).","Salsa Diana (che deriva dalla Poivrade).","Salsa Bearnese (che deriva dall'olandese)."], correct:0, exp:"La Charcutière è Robert + cetriolini in sott'aceto a fiammifero. La Robert è una derivata della demi-glace."},
+      {n:15, type:"vf", q:"La salsa Mornay si ottiene aggiungendo alla besciamella tuorlo d'uovo e formaggio.", correct:true, exp:"La Mornay è besciamella + tuorlo d'uovo + formaggio."},
+      {n:16, type:"mc", q:"La salsa Nantua è una derivata della besciamella alla quale si aggiungono:", opts:["Tuorlo d'uovo e formaggio.","Purea di cipolle stufate.","Panna, burro di gamberi di fiume e code di gamberi di fiume.","Velouté di grasso, jus di vitello e brodo di funghi."], correct:2, exp:"La Nantua è besciamella + panna + burro di gamberi di fiume + code di gamberi di fiume."},
+      {n:17, type:"mc", q:"La salsa Mousseline (o Chantilly) calda è una derivata della:", opts:["Maionese.","Olandese.","Bearnese.","Besciamella."], correct:1, exp:"La Mousseline (o Chantilly calda) è olandese + panna semimontata. Esiste anche la Mousseline o Chantilly fredda, derivata della maionese."},
+      {n:18, type:"mc", q:"La salsa Paloise è una variante della Bearnese in cui:", opts:["Si aggiunge glassa di carne.","Si sostituisce il dragoncello e il cerfoglio con la menta.","Si aggiunge succo e scorza di arancia sanguinella.","Si aggiunge passato di pomodoro maturo."], correct:1, exp:"La Paloise è una bearnese in cui la menta sostituisce dragoncello e cerfoglio."},
+      {n:19, type:"mc", q:"La salsa Foyot (o Valois) è ottenuta aggiungendo alla Bearnese:", opts:["Senape e zucchero.","Glassa di carne.","Cetriolini in sott'aceto a fiammifero.","Burro di scalogno e cerfoglio."], correct:1, exp:"La Foyot (o Valois) è bearnese + glassa di carne."},
+      {n:20, type:"mc", q:"Quale combinazione corrisponde correttamente alla salsa Solferino?", opts:["Salsa al pomodoro + glassa di carne + pepe di Cayenna + succo di limone + burro «Maitre d'hotel» + burro di scalogno.","Maionese + senape + cetriolini, capperi, acciuga, prezzemolo, dragoncello, cerfoglio tritati.","Olandese + succo e scorza di arancia sanguinella.","Spagnola + mirepoix rosolato + aceto di vino rosso + pepe nero."], correct:0, exp:"La Solferino è salsa al pomodoro + glassa di carne + pepe di Cayenna + succo di limone + burro «Maitre d'hotel» + burro di scalogno."},
+    ]
+  },
+  {
+    title: "La Pasta e le Farine",
+    subtitle: "Capitolo 2 — Livello: Medio → Difficile",
+    qs: [
+      {n:21, type:"mc", q:"Le lagane di epoca greco-romana erano:", opts:["Paste secche bollite, simili agli odierni spaghetti.","Rudimentali sfoglie di pasta, ma arrostite o fritte (non bollite).","Paste ripiene di carne tipiche dell'epoca di Apicio.","Paste fresche servite al dente con sugna e cacio."], correct:1, exp:"Le lagane erano rudimentali sfoglie di pasta che però venivano arrostite o fritte, non bollite."},
+      {n:22, type:"vf", q:"Apicio, intorno all'anno 0, descrive nei suoi scritti diverse preparazioni di pasta.", correct:false, exp:"Apicio (anno 0 ca.) NON cita alcuna preparazione di «pasta»; Greci e Romani non forniscono tracce della pasta come la intendiamo oggi."},
+      {n:23, type:"mc", q:"Il geografo arabo Idrisi (1100/1165) testimonia la produzione di pasta a:", opts:["Gragnano, in Campania.","Trabia, in Sicilia.","Torre Annunziata, in Campania.","Genova, in Liguria."], correct:1, exp:"Idrisi descrive la produzione di pasta a Trabia («la quadrata»), a ponente di Termini, in Sicilia, da cui si esportava in molte parti del Mediterraneo."},
+      {n:24, type:"mc", q:"Tra il XVI e il XVII secolo, dove nascono le corporazioni dei pastai e si registra il boom produttivo?", opts:["Sicilia e Puglia.","Liguria e Campania.","Toscana ed Emilia-Romagna.","Friuli e Veneto."], correct:1, exp:"Tra il XVI e il XVII secolo nascono le corporazioni dei pastai in Liguria e Campania, con boom produttivo a Napoli (Torre Annunziata e Gragnano)."},
+      {n:25, type:"mc", q:"In quale secolo viene introdotto il torchio a trafila?", opts:["XVI secolo.","XVII secolo.","XVIII secolo.","XIX secolo."], correct:2, exp:"Il torchio a trafila è introdotto nel XVIII secolo. Nel XVII era stata introdotta la gramola a stanga; nel XIX sec. gli essiccatoi a giostra."},
+      {n:26, type:"vf", q:"Pellegrino Artusi nel 1891 consacra la pasta come «primo piatto» italiano per eccellenza.", correct:true, exp:"Nel 1891 Artusi consacra la pasta come «primo piatto» italiano per eccellenza."},
+      {n:27, type:"mc", q:"Quale specie di grano è impiegata principalmente per la produzione di paste fresche e ripiene?", opts:["Triticum durum (grano duro).","Triticum aestivum (grano tenero).","Entrambe le specie indifferentemente.","Triticum spelta (farro)."], correct:1, exp:"Il grano tenero (Triticum aestivum) si usa per paste fresche e ripiene; il grano duro (Triticum durum) per paste secche."},
+      {n:28, type:"mc", q:"Quali sono le proteine principali dell'endosperma del grano, responsabili della formazione del glutine?", opts:["Albumina e globulina.","Amilosio e amilopectina.","Gliadina e glutenina.","Caseina e siero-proteine."], correct:2, exp:"Le proteine principali dell'endosperma sono gliadina e glutenina; a contatto con acqua e per azione meccanica formano il glutine."},
+      {n:29, type:"mc", q:"Dove sono localizzati prevalentemente i sali minerali e le vitamine del chicco di grano?", opts:["Nell'endosperma.","Nello scutello.","Nella parte esterna del chicco (crusca e germe), e per questo presenti soprattutto nei prodotti integrali.","Nell'amilopectina."], correct:2, exp:"Sali minerali e vitamine sono localizzate nella parte esterna del chicco (crusca e germe), per questo presenti soprattutto nei prodotti integrali."},
+      {n:30, type:"mc", q:"Cosa significa «abburattamento» nell'industria molitoria?", opts:["La fase di lievitazione naturale dell'impasto.","La percentuale di farina estratta da un chicco, ovvero la «resa» della setacciatura.","Il processo di tostatura dei chicchi prima della macinazione.","La denaturazione del glutine durante la cottura."], correct:1, exp:"Abburattamento = setacciatura; corrisponde alla percentuale di farina estratta da un chicco, cioè la «resa»."},
+      {n:31, type:"vf", q:"Più è basso il contenuto di ceneri di una farina, più questa è stata prodotta con il solo endosperma e quindi risulta più bianca.", correct:true, exp:"La legge italiana classifica le farine in base al contenuto di ceneri: più è basso, più la farina è prodotta con il solo endosperma e più è bianca; la farina integrale ha invece il massimo contenuto di ceneri."},
+      {n:32, type:"mc", q:"Secondo il D.P.R. 187/2001, una farina di tipo «00» destinata alla panificazione deve avere:", opts:["Ceneri massimo 0,55% e proteine min. 9%.","Ceneri massimo 0,65% e proteine min. 11%.","Ceneri massimo 0,80% e proteine min. 12%.","Ceneri minimo 1,3% e massimo 1,7%."], correct:0, exp:"Farina tipo 00: ceneri massimo 0,55%, proteine min. 9% (umidità max 14,5%)."},
+      {n:33, type:"mc", q:"La farina integrale, secondo la stessa normativa, ha un contenuto di ceneri:", opts:["Massimo 0,55%.","Massimo 0,95%.","Minimo 1,3% e massimo 1,7%.","Inferiore a 0,65%."], correct:2, exp:"Farina integrale: ceneri minimo 1,3% e massimo 1,7%; proteine min. 12%."},
+      {n:34, type:"mc", q:"Indicativamente, di quanta acqua il glutine è in grado di assorbire rispetto al proprio peso?", opts:["Metà del proprio peso.","Una volta il proprio peso.","Una volta e mezzo il proprio peso.","Tre volte il proprio peso."], correct:2, exp:"Il glutine assorbe indicativamente una volta e mezzo il suo peso in acqua e durante la lievitazione trattiene l'anidride carbonica del lievito."},
+      {n:35, type:"mc", q:"Quale ruolo hanno rispettivamente glutenine e gliadine nelle proprietà dell'impasto?", opts:["Le glutenine rendono l'impasto estensibile, le gliadine lo rendono tenace ed elastico.","Le glutenine rendono l'impasto tenace ed elastico, le gliadine lo rendono estensibile.","Entrambe rendono l'impasto tenace ed elastico.","Le glutenine assorbono acqua, le gliadine trattengono l'anidride carbonica."], correct:1, exp:"Le glutenine rendono l'impasto tenace ed elastico; le gliadine lo rendono estensibile."},
+      {n:36, type:"mc", q:"Una farina con valore W tra 250 e 300 è classificata come:", opts:["Farina debole, adatta a biscotti e grissini.","Farina media, adatta a pane francese o all'olio.","Farina forte, adatta ai grandi lievitati, che assorbe fino al 75% di acqua.","Farina speciale, esclusivamente per paste secche."], correct:2, exp:"Da 250 a 300 W = farine forti, di pregio, adatte ai grandi lievitati; assorbono fino al 75% di acqua. Le deboli (120-160 W) assorbono fino al 50%, le medie (160-250 W) fino al 65%."},
+      {n:37, type:"mc", q:"A che temperatura inizia la denaturazione del glutine durante la cottura?", opts:["60° C.","70° C.","95° C.","140° C."], correct:1, exp:"Il glutine inizia a denaturarsi a 70°C; assume struttura «callosa» dai 95°C, ma se troppo cotto la perde mentre i granuli di amido si disgregano."},
+      {n:38, type:"vf", q:"L'amido inizia a gelificare a partire da 60°/70° C.", correct:true, exp:"L'amido inizia a gelificare a partire dai 60°/70°C."},
+      {n:39, type:"mc", q:"L'alveografo di Chopin è uno strumento che:", opts:["Misura la percentuale ottimale di acqua tramite resistenza meccanica nel tempo.","Soffia aria al centro di un disco di pasta per simulare la lievitazione e misurare la capacità di trattenere il gas, fornendo l'indice W.","Determina il punto di ebollizione della pasta in cottura.","Esamina la struttura cristallina dei granuli di amido al microscopio elettronico."], correct:1, exp:"Nell'alveografo viene soffiata aria al centro di un disco di pasta di peso e idratazione standard per produrre una bolla, simulando la lievitazione e misurando la capacità di trattenere il gas; il risultato (energia totale per rompere l'impasto) è W."},
+      {n:40, type:"mc", q:"Nell'alveogramma, gli indici P, L e W rappresentano rispettivamente:", opts:["Pressione del forno, lunghezza della maglia, peso totale.","Tenacità (mm), estensibilità (mm), lavoro (cm² = J/erg, cioè la «forza della farina»).","Proteine, lipidi, carboidrati.","Pressione iniziale, lunghezza dei dischetti, volume del bicchiere."], correct:1, exp:"P = tenacità (mm); L = estensibilità (mm); W = lavoro (cm² = J/erg), detto anche «forza della farina»."},
+      {n:41, type:"mc", q:"Nell'alveogramma, qual è il valore di riferimento del rapporto P/L?", opts:["0,1.","0,5.","1,0.","2,0."], correct:1, exp:"Il valore di riferimento del rapporto P/L è 0,5; rappresenta proporzioni e caratteristiche reologiche dell'impasto."},
+      {n:42, type:"mc", q:"Il farinografo di Brabender, inventato negli anni '30 del Novecento, serve a:", opts:["Misurare il punto di fumo degli oli.","Registrare graficamente la resistenza dell'impasto in funzione del tempo, individuando idratazione ottimale, sviluppo, stabilità e indice di caduta.","Misurare la quantità di glutine residuo dopo la cottura.","Soffiare aria nei dischetti di impasto per simulare la lievitazione."], correct:1, exp:"Il farinografo registra graficamente — tramite pennino mobile su carta — la resistenza dell'impasto in funzione del tempo, fornendo idratazione ottimale, tempo di sviluppo, stabilità e indice di caduta."},
+      {n:43, type:"mc", q:"Quanti minuti di impastamento riescono a sopportare le farine di qualità eccellente, secondo il farinografo?", opts:["Non più di 3 minuti.","Circa 5 minuti.","Anche tempi superiori ai 10 minuti.","Esattamente 7 minuti."], correct:2, exp:"Farine di bassa qualità non reggono più di 3 minuti di impastamento, mentre farine di qualità eccellente possono reggere anche tempi superiori ai 10 minuti."},
+      {n:44, type:"mc", q:"Le trafile in teflon, rispetto a quelle in bronzo, producono pasta:", opts:["Più rugosa, perché il teflon è un materiale ruvido.","Meno rugosa, perché il teflon è più liscio del bronzo.","Identica nell'aspetto superficiale.","Più friabile dopo la cottura."], correct:1, exp:"Le trafile in teflon, essendo più lisce di quelle in bronzo, danno un risultato meno «rugoso»."},
+      {n:45, type:"mc", q:"Quale norma legislativa regolamenta in Italia farine, sfarinati di grano duro e paste alimentari, sostituendo la legge 580 del 1967?", opts:["Il D.P.R. 187/2001 del 9 febbraio 2001.","Il Reg. (UE) 1308/2013.","Il Decreto Presidenziale 22 febbraio 2001 n° 187.","Sia A che C: il D.P.R. 187/2001, che si articola in CAPO I (farine e sfarinati di grano duro) e CAPO II (paste alimentari)."], correct:3, exp:"Il D.P.R. 187/2001 del 9 febbraio 2001, che sostituisce la legge 580 del 1967, regolamenta al CAPO I farine e sfarinati di grano duro e al CAPO II la pasta alimentare. Il Decreto Presidenziale 22 febbraio 2001 n° 187 è la stessa norma citata in tabella."},
+      {n:46, type:"vf", q:"I granuli di farina di grano tenero hanno una forma sferica, mentre quelli di semola hanno contorni più spigolosi.", correct:true, exp:"I granuli di farina di grano tenero hanno forma sferica; quelli di semola hanno contorni più spigolosi. Il grano tenero ha inoltre in generale un contenuto proteico inferiore al grano duro."},
+      {n:47, type:"mc", q:"Le tajerin (formato di pasta lunga) sono caratterizzate dal fatto di essere:", opts:["Realizzate con solo albume.","Spesse 2 cm.","Realizzate con solo tuorlo, larghezza 2 mm.","Frastagliate sui bordi, larghe 0,7 cm."], correct:2, exp:"I tajerin sono pasta lunga di solo tuorlo, larghezza 2 mm. Le tagliatelle sono 0,7 cm; le pappardelle 2 cm; le reginette sono frastagliate, larghe 2 cm."},
+      {n:48, type:"mc", q:"Quale tra i seguenti formati di pasta corta è realizzato con sola acqua e farina (senza uovo)?", opts:["Corzetti.","Trofie.","Tortelli.","Cappelletti."], correct:1, exp:"Le trofie sono di acqua e farina. I corzetti sono di vino, acqua e farina; tortelli e cappelletti sono paste fresche ripiene."},
+    ]
+  },
+  {
+    title: "Il Riso",
+    subtitle: "Capitolo 3 — Livello: Medio → Difficile",
+    qs: [
+      {n:49, type:"mc", q:"Da quale area geografica è originaria l'Oryza sativa?", opts:["Africa centrale.","Bacino del Mediterraneo.","Una vasta regione che si estendeva dall'India orientale fino alla Cina meridionale.","Mesoamerica."], correct:2, exp:"L'Oryza sativa è originaria di una vasta regione che si estendeva dall'India orientale fino alla Cina meridionale, dove i progenitori selvatici crescevano già 15.000 anni fa."},
+      {n:50, type:"vf", q:"I più antichi resti di riso coltivato risalgono a oltre 7.000 anni fa e sono stati ritrovati nella Cina orientale e nell'India nord-orientale.", correct:true, exp:"I più antichi resti di riso coltivato sono stati trovati nella Cina orientale e nell'India nord-orientale e risalgono a oltre 7.000 anni fa."},
+      {n:51, type:"mc", q:"Chi fu il primo, nel mondo classico, a descrivere il riso in un trattato?", opts:["Plinio il Vecchio.","Apicio.","Teofrasto, contemporaneo di Alessandro Magno.","Catone il Censore."], correct:2, exp:"Teofrasto, contemporaneo di Alessandro Magno, fu il primo a descrivere il riso nel suo trattato sulla storia delle piante."},
+      {n:52, type:"mc", q:"Quando e per opera di chi avvenne il trasferimento della coltivazione del riso dall'Egitto alla Spagna?", opts:["Nel V sec. a.C., a opera dei Greci.","Probabilmente poco dopo il 1000 d.C., a opera della colonizzazione araba.","Nel III sec. d.C., con l'espansione romana.","Nel XV secolo, con i navigatori portoghesi."], correct:1, exp:"Si deve alla colonizzazione araba il trasferimento della coltivazione del riso dall'Egitto alla Spagna, probabilmente poco dopo il 1000 d.C."},
+      {n:53, type:"mc", q:"Qual è il primo documento che dimostra la coltivazione del riso in Italia?", opts:["Un decreto di Federico II del 1240.","Un calmiere siciliano del 1371.","Una lettera di Galeazzo Maria Sforza del 1475, che prometteva di inviare 12 sacchi di riso al Duca di Ferrara.","Un atto notarile veneziano del 1390."], correct:2, exp:"Il primo documento che dimostra la coltivazione del riso in Italia risale al 1475 ed è una lettera di Galeazzo Maria Sforza, che prometteva di inviare 12 sacchi di riso al Duca di Ferrara."},
+      {n:54, type:"mc", q:"Il «triangolo d'oro del riso» italiano è costituito dalle province di:", opts:["Pavia, Vercelli e Novara.","Milano, Mantova e Lodi.","Vercelli, Verona e Ferrara.","Pavia, Alessandria e Biella."], correct:0, exp:"Il «triangolo d'oro del riso» è composto dalle tre province di Vercelli, Novara e Pavia."},
+      {n:55, type:"vf", q:"Le regioni Piemonte e Lombardia, insieme, rappresentano il 93% della produzione nazionale italiana di riso.", correct:true, exp:"Piemonte e Lombardia rappresentano il 93% della produzione nazionale italiana di riso."},
+      {n:56, type:"mc", q:"Tra le seguenti denominazioni, quale è effettivamente associata al riso italiano?", opts:["Riso Carnaroli del Po DOP.","Riso Nano Vialone Veronese IGP.","Riso Arborio della Pianura Padana DOP.","Riso di Sibari IGP."], correct:1, exp:"Le denominazioni citate sono: Riso di Baraggia Biellese e Vercellese DOP, Riso Nano Vialone Veronese IGP, Riso del Delta del Po IGP."},
+      {n:57, type:"mc", q:"Cosa sono i cereali «vestiti» e quali esempi vengono citati?", opts:["Cereali che vengono macinati con l'involucro: grano, segale e mais.","Cereali che, per migliorarne conservazione e cottura, devono essere privati della pula: orzo, avena e riso.","Cereali aromatizzati industrialmente: farro, miglio e quinoa.","Cereali tostati prima della cottura: orzo, avena e segale."], correct:1, exp:"I cereali «vestiti» (orzo, avena, riso) devono essere privati della pula per migliorarne conservazione, cottura e consumo. Grano, segale e mais sono cereali «nudi»."},
+      {n:58, type:"mc", q:"Le oltre 2.500 varietà di riso domesticato derivano da quante specie principali?", opts:["Una sola: Oryza sativa.","Due: Oryza sativa (Asia) e Oryza glaberrima Steud. (Africa).","Tre: japonica, indica e javanica.","Quattro, una per continente abitato."], correct:1, exp:"Tutte le oltre 2.500 varietà derivano da 2 specie: Oryza sativa (Asia, la più diffusa) e Oryza glaberrima Steud. (Africa). Japonica, indica e javanica sono sottospecie dell'Oryza sativa."},
+      {n:59, type:"mc", q:"A quale sottospecie di Oryza sativa appartengono Patna e Basmati?", opts:["japonica.","indica.","javanica.","glaberrima."], correct:1, exp:"Patna e Basmati appartengono alla sottospecie indica. La japonica raccoglie le varietà italiane; la javanica è indonesiana."},
+      {n:60, type:"mc", q:"Cosa si intende, secondo il codice internazionale, per «cultivar»?", opts:["Una specie biologica completamente nuova.","Una varietà di pianta coltivata, ottenuta con il miglioramento genetico (analoga alla razza per le specie animali).","Un sinonimo esatto di «varietà» in senso botanico.","Un metodo di coltivazione tradizionale italiano."], correct:1, exp:"Cultivar è una varietà di pianta coltivata, ottenuta con il miglioramento genetico; analoga alla razza per le specie animali."},
+      {n:61, type:"mc", q:"Lo strato aleuronico del chicco di riso:", opts:["Costituisce più dell'80% dell'intera cariosside.","È lo strato periferico dell'endosperma, contenente lipidi, proteine (es. lisina), tiamina e sali minerali.","È il sottoprodotto della sbramatura, ricco di fibra insolubile.","È il cotiledone modificato che convoglia i nutrienti al germe."], correct:1, exp:"Lo strato aleuronico è lo strato periferico dell'endosperma, formato da poche cellule di spessore ma contenente lipidi, proteine (es. lisina), tiamina e sali minerali."},
+      {n:62, type:"mc", q:"Lo scutello, nel chicco di riso, è:", opts:["Un altro nome per indicare il germe.","Lo strato esterno protettivo della cariosside.","Un cotiledone modificato che assorbe, trasforma e convoglia i nutrienti dall'endosperma al germe.","La parte fibrosa esterna ricca di vitamine del gruppo B."], correct:2, exp:"Lo scutello è un cotiledone modificato che assorbe, trasforma e convoglia i nutrienti dall'endosperma al germe."},
+      {n:63, type:"mc", q:"L'endosperma di una cariosside di riso costituisce:", opts:["Meno del 50% dell'intera cariosside.","Circa il 60% dell'intera cariosside.","Più dell'80% dell'intera cariosside, contenendo 80–85% di carboidrati e 8–15% di amminoacidi.","Esattamente la metà del peso del chicco."], correct:2, exp:"L'endosperma costituisce più dell'80% dell'intera cariosside, con 80–85% di carboidrati (amilosio e amilopectina) e 8–15% di amminoacidi (soprattutto treonina e metionina; lisina e triptofano in percentuali minime, peraltro persi con la brillatura)."},
+      {n:64, type:"mc", q:"La sommersione dei campi nella coltivazione del riso ha la funzione di:", opts:["Aerare il terreno e incorporare il fertilizzante.","Proteggere il seme e ridurre le erbe spontanee avventizie e infestanti.","Sostituire la concimazione di fine marzo.","Determinare il potenziamento e l'allungamento delle radici."], correct:1, exp:"La sommersione protegge il seme e riduce le erbe spontanee avventizie e infestanti. Aerazione e incorporamento del fertilizzante sono funzioni dell'aratura."},
+      {n:65, type:"mc", q:"La fase di «asciutta» nella risicoltura:", opts:["Avviene a fine inverno, prima dell'aratura.","Ha luogo 15-20 giorni dopo la semina e determina il potenziamento e l'allungamento delle radici, una migliore nutrizione e uno sviluppo vegetativo superiore.","Coincide con la trebbiatura tra settembre e ottobre.","Riduce l'umidità del risone fino al 15%."], correct:1, exp:"L'asciutta avviene 15-20 giorni dopo la semina e determina potenziamento e allungamento delle radici, miglior nutrizione della pianta e superiore sviluppo vegetativo."},
+      {n:66, type:"mc", q:"Le cultivar di riso «medie» hanno un ciclo di:", opts:["Inferiore a 150 giorni.","Da 150 a 160 giorni.","Tra 160 e 170 giorni.","Oltre 200 giorni."], correct:1, exp:"Cultivar precoci: < 150 giorni; medie: 150-160 giorni; tardive: 160-170 giorni."},
+      {n:67, type:"mc", q:"Qual è il limite massimo di umidità a cui il risone deve essere essiccato per la buona conservazione?", opts:["22-28%.","18%.","15%.","10%."], correct:2, exp:"Il risone raccolto ha umidità 22-28%; deve essere essiccato fino al 15%, limite massimo per buona conservazione e lavorazione del prodotto destinato all'alimentazione."},
+      {n:68, type:"mc", q:"Cosa si ottiene con la sola sbramatura del risone?", opts:["Riso «mercantile», già destinabile all'alimentazione umana.","Riso «greggio» o «cargo» o «paddy», commercializzabile ma non destinato all'alimentazione umana.","Riso «brillato», pronto per il consumo.","Riso «camolino», trattato con olio."], correct:1, exp:"Con la sola sbramatura si ottiene il riso «greggio» (o «cargo» o «paddy»), commercializzabile ma non destinato all'alimentazione umana. Con un ulteriore passaggio ed eliminando la grana verde si ottiene il «semigreggio» o «integrale»."},
+      {n:69, type:"mc", q:"Il riso «mercantile» è il primo prodotto:", opts:["Della parboilizzazione.","Della sbiancatura, destinabile all'alimentazione umana.","Della spazzolatura industriale.","Della lucidatura con olio minerale."], correct:1, exp:"Il riso «mercantile» è il primo prodotto del riso destinabile all'alimentazione umana, ottenuto con la sbiancatura (rimozione di pula e germe). Aumentando l'intensità si ottiene il «raffinato» di 1ª e 2ª qualità."},
+      {n:70, type:"vf", q:"Il riso «brillato» si ottiene dopo spazzolatura, addizionando il riso raffinato di glucosio in polvere.", correct:true, exp:"Il riso ormai raffinato, dopo spazzolatura, viene addizionato di glucosio in polvere per diventare riso «brillato»."},
+      {n:71, type:"mc", q:"Il riso «camolino» si ottiene:", opts:["Trattando il riso con olio minerale o di lino dopo la spazzolatura.","Aggiungendo glucosio in polvere durante la brillatura.","Cuocendo parzialmente il risone con vapore.","Tostando il riso a 140°C."], correct:0, exp:"Dopo la spazzolatura, il riso può essere trattato con olio minerale o di lino, ottenendo il riso «camolino». Il glucosio in polvere caratterizza invece il «brillato»."},
+      {n:72, type:"mc", q:"Quale tra i seguenti NON è un vantaggio del processo di parboiling?", opts:["Facilita sbramatura e sbiancatura, separando lolla e pula.","Migliora le qualità nutritive diffondendo la tiamina di crusca e germe nell'endosperma.","Inattiva gli enzimi della lipasi, allungando la shelf-life e riducendo l'irrancidimento.","Aumenta il contenuto di amido del 30%."], correct:3, exp:"I vantaggi sono: facilita sbramatura/sbiancatura, migliora le qualità nutritive (diffusione tiamina), gelatinizza l'aleurone e allunga la shelf-life inibendo la lipasi. L'aumento del 30% di amido non è citato."},
+      {n:73, type:"mc", q:"Da quanto tempo è noto e utilizzato in India e Pakistan il processo di parboilizzazione?", opts:["Da circa 200 anni.","Da circa 500 anni.","Già 2.000 anni fa.","È un'invenzione del Novecento."], correct:2, exp:"Il processo di parboilizzazione è noto e utilizzato in India e Pakistan già 2.000 anni fa."},
+      {n:74, type:"mc", q:"Secondo la classificazione merceologica italiana del 1958, quali sono le 4 classi del riso lavorato?", opts:["Tondo, Fino, Semifino, Superfino.","Comune, Originario, Semifino, Superfino.","Corto, Medio, Lungo A, Lungo B.","Japonica, Indica, Javanica, Glaberrima."], correct:0, exp:"Dal 1958 le 4 classi merceologiche italiane sono Tondo, Semifino, Fino e Superfino."},
+      {n:75, type:"mc", q:"A quale classe merceologica italiana appartengono Carnaroli e Arborio?", opts:["Risi comuni o originari.","Risi semifini.","Risi fini.","Risi superfini."], correct:3, exp:"Carnaroli e Arborio sono risi superfini (insieme a Baldo). I semifini sono Vialone Nano, Rosa Marchetti, Padano; i fini S. Andrea, Ribe, Ringo, Ronaldo; i comuni/originari Balilla, Selenio, Rubino."},
+      {n:76, type:"mc", q:"Secondo il Regolamento (UE) 1308/2013, il «riso a grani lunghi B» si distingue per:", opts:["Lunghezza pari o inferiore a 5,2 mm e rapporto lunghezza-larghezza inferiore a 2.","Lunghezza superiore a 5,2 mm e pari o inferiore a 6 mm.","Lunghezza superiore a 6,0 mm e rapporto superiore a 2 e inferiore a 3.","Lunghezza superiore a 6,0 mm e rapporto pari o superiore a 3."], correct:3, exp:"Riso a grani lunghi B: lunghezza superiore a 6,0 mm e rapporto lunghezza/larghezza pari o superiore a 3."},
+      {n:77, type:"mc", q:"Il riso Arborio, secondo la sua scheda descrittiva, presenta:", opts:["Genealogia Vialone × Lady Wright; gruppo japonica; anno 1946; lunghezza 7 mm; classificazione Lungo A (Superfine).","Genealogia Arborio × St 136; gruppo japonica; anno 1964; lunghezza 6,9 mm.","Genealogia Vialone × lencino; gruppo japonica; anno 1945; lunghezza 6,9 mm.","Genealogia Selezione da Chinese originario; gruppo japonica; anno 1924."], correct:0, exp:"Arborio: genealogia Vialone × Lady Wright, gruppo japonica, anno 1946, lunghezza 7 mm, larghezza 3,4 mm, rapporto L/L 2,1, classificazione Lungo A (Superfine)."},
+      {n:78, type:"mc", q:"Il riso Carnaroli ha come genealogia:", opts:["Vialone × Lady Wright (anno 1946).","Vialone × lencino (anno 1945).","Balilla × Razza 77 (anno 1931).","Nano × Vialone (anno 1937)."], correct:1, exp:"Carnaroli: genealogia Vialone × lencino, gruppo japonica, anno 1945, lunghezza 6,9 mm, classificazione Lungo A (Superfine)."},
+      {n:79, type:"mc", q:"Quale tra le seguenti varietà NON appartiene alla classificazione «Lungo A (Superfine)»?", opts:["Arborio.","Baldo.","Roma.","Vialone Nano."], correct:3, exp:"Vialone Nano è classificato Medio (Semifine), con lunghezza 5,7 mm e rapporto L/L 1,6. Arborio, Baldo e Roma sono tutti Lungo A (Superfine)."},
+      {n:80, type:"mc", q:"Il riso Balilla si caratterizza per:", opts:["Genealogia Selezione da Chinese originario, anno 1924, lunghezza 5,1 mm, rapporto L/L 1,7, classificazione Tondo (Originario).","Genealogia Nano × Vialone, anno 1937, classificazione Medio (Semifine).","Genealogia Vialone × lencino, anno 1945, classificazione Lungo A (Superfine).","Genealogia Balilla × Razza 77, anno 1931, classificazione Lungo A."], correct:0, exp:"Balilla: selezione da Chinese originario, japonica, anno 1924, lunghezza 5,1 mm, larghezza 3 mm, rapporto L/L 1,7, classificazione Tondo (Originario)."},
+      {n:81, type:"mc", q:"Il Vialone Nano è classificato come:", opts:["Lungo A (Superfine).","Lungo B.","Medio (Semifine), con rapporto lunghezza/larghezza pari a 1,6.","Tondo (Originario), con rapporto 1,7."], correct:2, exp:"Vialone Nano: genealogia Nano × Vialone, japonica, anno 1937, lunghezza 5,7 mm, larghezza 3,5 mm, rapporto 1,6, classificazione Medio (Semifine)."},
+    ]
+  },
+  {
+    title: "Tecniche di Cottura",
+    subtitle: "Capitolo 4 — Livello: Medio → Difficile",
+    qs: [
+      {n:82, type:"mc", q:"Quali sono i tre principi di trasmissione del calore impiegati nelle cotture?", opts:["Sublimazione, evaporazione, condensazione.","Conduzione, convezione, irradiamento.","Osmosi, diffusione, capillarità.","Caramellizzazione, Maillard, gelatinizzazione."], correct:1, exp:"I tre principi di trasmissione del calore sono conduzione, convezione e irradiamento."},
+      {n:83, type:"mc", q:"La convezione è tanto più attiva quanto:", opts:["Maggiore è la viscosità del mezzo coinvolto.","Minore è la viscosità del mezzo coinvolto (liquido o gas).","Maggiore è la temperatura della sorgente.","Minore è il contatto fisico tra sorgente e oggetto."], correct:1, exp:"La convezione è tanto più attiva quanto meno viscoso è il mezzo coinvolto (liquido o gas)."},
+      {n:84, type:"vf", q:"L'irradiamento è un processo che richiede il contatto fisico tra la sorgente di calore e l'oggetto.", correct:false, exp:"L'irradiamento è un processo che NON richiede il contatto fisico tra la sorgente e l'oggetto; le radiazioni termiche/elettromagnetiche sono emesse da atomi e molecole sotto forma di onde."},
+      {n:85, type:"mc", q:"Le cotture per concentrazione sono caratterizzate da:", opts:["Temperature relativamente basse e tempi prolungati, in ambiente umido, per estrarre sapori nel liquido.","Temperature elevate e ambiente secco, con minore perdita di sapori, aromi e sostanze nutritive.","Temperature inferiori a 65°C e assenza di liquidi.","Cotture esclusivamente in forno a microonde."], correct:1, exp:"Le cotture concentrative avvengono a temperature elevate e in ambiente secco, con minor perdita di sapori, aromi e sostanze nutritive (es. arrostiture, fritture, vapore)."},
+      {n:86, type:"mc", q:"La stufatura è un esempio di cottura:", opts:["Concentrativa, a calore secco.","Estrattiva, a temperature relativamente basse e tempi prolungati.","Mista, in due tempi.","Per immersione in grasso."], correct:1, exp:"La stufatura è una cottura estrattiva (a calore umido); le cotture estrattive operano a temperature relativamente basse e tempi prolungati per estrarre sapori, aromi e sostanze nel liquido."},
+      {n:87, type:"mc", q:"La reazione di Maillard è osservabile a partire da:", opts:["100° C circa.","120° C circa.","140°/145° C.","200° C."], correct:2, exp:"La reazione di Maillard è osservabile a partire da 140°/145°C e produce colori e sapori tipici (crosta del pane, birre scure, carni arrostite, frutta a guscio tostata)."},
+      {n:88, type:"mc", q:"Tra quali componenti chimici avviene la reazione di Maillard?", opts:["Tra acidi grassi e zuccheri.","Tra amminoacidi (proteine) e carboidrati (zuccheri).","Tra acqua e amido.","Tra proteine e lipidi."], correct:1, exp:"La reazione di Maillard è un insieme complesso di reazioni chimiche tra amminoacidi (proteine) e carboidrati (zuccheri)."},
+      {n:89, type:"mc", q:"La reazione di caramellizzazione è osservabile a partire da:", opts:["100° C.","140° C.","155° C.","220° C."], correct:2, exp:"La caramellizzazione, dovuta alla degradazione termica degli zuccheri, è osservabile a partire da 155°C; dà sapori dall'agrodolce all'amaro e colorazioni dal giallo pallido al brunito."},
+      {n:90, type:"vf", q:"Nella bollitura non si possono produrre reazioni di caramellizzazione e Maillard, poiché la temperatura massima raggiungibile è di 100°C.", correct:true, exp:"La temperatura più alta raggiungibile in bollitura è 100°C (punto di ebollizione dell'acqua), insufficiente per Maillard (≥140°C) e caramellizzazione (≥155°C)."},
+      {n:91, type:"mc", q:"Quali principi di trasmissione del calore sono implicati nell'arrostitura allo spiedo?", opts:["Solo conduzione.","Irradiamento (radiazioni infrarosse) e convezione (aria).","Solo convezione.","Conduzione e osmosi."], correct:1, exp:"Allo spiedo: irradiamento (radiazioni infrarosse) e convezione (aria)."},
+      {n:92, type:"mc", q:"Nell'arrostitura alla griglia operano:", opts:["Conduzione (fondo della padella).","Irradiamento (radiazioni infrarosse) e conduzione (materiale della griglia).","Solo irradiamento.","Convezione e osmosi."], correct:1, exp:"Alla griglia: irradiamento (radiazioni infrarosse) e conduzione (materiale della griglia)."},
+      {n:93, type:"mc", q:"Bollire partendo da acqua fredda rispetto all'acqua già calda produce una cottura:", opts:["Più concentrativa.","Più estrattiva.","Identica nei risultati.","Esclusivamente preliminare (sbianchitura)."], correct:1, exp:"Bollire partendo da acqua fredda rende la cottura più estrattiva; partendo da acqua calda (100°C) la cottura è invece maggiormente concentrativa."},
+      {n:94, type:"mc", q:"Cosa si intende per «sbianchire» tra le varianti tecniche della bollitura?", opts:["Cuocere completamente un alimento in acqua salata.","Cottura preliminare volta ad intenerire o dare maggior consistenza agli alimenti e/o facilitarne la pulizia.","Mantenere l'alimento immerso in acqua a 65-80°C senza ebollizione.","Cuocere a vapore in autoclave."], correct:1, exp:"Sbianchire è una cottura preliminare volta a intenerire o dare maggior consistenza agli alimenti e/o facilitarne la pulizia."},
+      {n:95, type:"mc", q:"L'affogatura è una lessatura senza ebollizione che opera nell'intervallo:", opts:["40°C / 55°C.","65°C / 80°C.","90°C / 100°C.","100°C / 120°C."], correct:1, exp:"L'affogatura è una lessatura senza ebollizione tra 65°C e 80°C; si usa una quantità di liquido appena sufficiente a sommergere il prodotto, per ridurre i moti convettivi."},
+      {n:96, type:"mc", q:"Per cosa è particolarmente adatta la tecnica dell'affogatura?", opts:["Per le carni di grossa pezzatura.","Per cibi e preparazioni delicate e cedevoli, come uova sgusciate, pesci e farce (es. quenelles).","Per le verdure dure come carote e patate.","Per la pasta secca."], correct:1, exp:"L'affogatura è particolarmente adatta per cibi e preparazioni delicati e cedevoli come uova sgusciate, pesci e farce (es. quenelles)."},
+      {n:97, type:"mc", q:"Quale di queste affermazioni sulla cottura al vapore è corretta?", opts:["È estrattiva, perché disperde i sapori nell'acqua.","È concentrativa; il vapore, pur essendo meno denso dell'acqua liquida, compensa la minor frequenza di contatto con una maggior energia (temperatura più elevata).","Avviene sempre a temperature inferiori a 100°C.","Funziona principalmente per irradiamento."], correct:1, exp:"La cottura al vapore è una tecnica a calore umido, concentrativa: il vapore, pur essendo meno denso dell'acqua liquida, compensa la minor frequenza di contatto con una maggiore energia (temperatura più elevata di quella dell'acqua in ebollizione)."},
+      {n:98, type:"mc", q:"La brasatura è tecnicamente:", opts:["Una cottura puramente concentrativa a calore secco.","Una cottura mista in due tempi: prima concentrativa (rosolatura a fuoco vivo per Maillard), poi estrattiva (a fuoco moderato in presenza di liquidi).","Una lessatura senza ebollizione.","Una cottura per sola immersione in grasso."], correct:1, exp:"La brasatura è una cottura «mista», in due tempi: prima fase concentrativa (rosolatura a fuoco vivo per Maillard), poi una seconda fase estrattiva, a fuoco moderato e in presenza di liquidi."},
+      {n:99, type:"mc", q:"Cosa rappresenta l'osmosi nel contesto della brasatura?", opts:["La caramellizzazione degli zuccheri di superficie.","Il processo con cui l'acqua passa, attraverso una membrana permeabile, da una soluzione più diluita a una più concentrata, tendendo a equilibrare le concentrazioni; favorisce il passaggio di componenti aromatici tra alimento e liquido.","La denaturazione delle proteine durante il riscaldamento.","La gelatinizzazione dell'amido."], correct:1, exp:"L'osmosi è il fenomeno per cui l'acqua passa, attraverso una membrana permeabile, da una soluzione più diluita a una più concentrata, tendendo a equilibrare le concentrazioni; è la parola chiave della brasatura."},
+      {n:100, type:"mc", q:"La frittura per immersione si basa principalmente su quale principio di trasmissione del calore?", opts:["Irradiamento.","Conduzione.","Solo convezione.","Osmosi."], correct:1, exp:"La frittura per immersione è una cottura per immersione in un grasso il cui principio di trasmissione del calore è la conduzione."},
+      {n:101, type:"mc", q:"L'intervallo tipico delle temperature di frittura è indicativamente:", opts:["60°C – 100°C.","100°C – 140°C.","140°/155°C – 190°/220°C, con frittura tipica intorno a 180°C.","220°C – 300°C."], correct:2, exp:"Le temperature di frittura vanno indicativamente dai 140°/155°C a 190°/220°C secondo ingrediente, dimensione e grasso. La temperatura tipica è circa 180°C."},
+      {n:102, type:"mc", q:"Cosa si intende per «punto di fumo» di un olio?", opts:["La temperatura a cui l'olio inizia a bollire.","La temperatura a cui la glicerina si stacca dagli acidi grassi e si producono fumi tossici (tra cui acroleina).","La temperatura ottimale di frittura.","La temperatura alla quale gli acidi grassi polinsaturi si saturano."], correct:1, exp:"Il punto di fumo è la temperatura a cui la glicerina si stacca dagli acidi grassi e si producono fumi tossici contenenti sostanze nocive come l'acroleina."},
+      {n:103, type:"mc", q:"Quali oli si degradano più rapidamente alle alte temperature?", opts:["Quelli ricchi di grassi monoinsaturi, come oliva, nocciole, arachidi.","Quelli ricchi di grassi polinsaturi, come mais e soia.","Tutti gli oli si degradano in modo identico.","Gli oli con maggiore percentuale di acido oleico."], correct:1, exp:"Gli oli ricchi di grassi polinsaturi (mais, soia) si degradano più rapidamente di quelli ricchi di monoinsaturi (oliva, nocciole, arachidi, in prevalenza acido oleico)."},
+      {n:104, type:"vf", q:"A temperature di frittura più basse di quella tipica, il cibo tende a impregnarsi di olio.", correct:true, exp:"A temperature più basse di quella tipica (~180°C) il cibo si impregna di olio; a temperature più alte rischia di bruciare velocemente."},
+      {n:105, type:"mc", q:"La tecnica della glassatura consiste essenzialmente nel:", opts:["Coprire l'alimento con una salsa madre fredda prima del servizio.","Ultimare la cottura concentrando i liquidi nei quali si cuoce l'alimento, fino a ottenere una consistenza che ammanta la preparazione; può seguire un'altra cottura (es. verdure sbianchite o carni arrostite).","Friggere l'alimento ad alta temperatura per ottenere una crosta dorata.","Aggiungere zucchero a velo dopo la cottura."], correct:1, exp:"La glassatura ultima la cottura concentrando i liquidi nei quali si cuoce l'alimento, fino a una consistenza che ammanta la preparazione; spesso segue altre cotture (verdure sbianchite, carni arrostite). Le glasse possono partire da fondi, sughi di cottura o sciroppi di zucchero."},
+      {n:106, type:"mc", q:"Cosa accentua, dal punto di vista organolettico, la presenza di acidi e/o grassi nei cibi glassati?", opts:["La consistenza croccante.","Il colore e la lucentezza superficiali.","Il sapore amaro.","La conservabilità a lungo termine."], correct:1, exp:"La presenza di acidi e/o grassi accentua alcuni aspetti organolettici dei cibi glassati, in particolare colore e lucentezza superficiali."},
+      {n:107, type:"vf", q:"La stufatura avviene sempre entro i 100°C, allo scopo di limitare la disidratazione del prodotto e dell'ambiente di cottura ed evitare le colorazioni e gli aromi tipici della reazione di Maillard.", correct:true, exp:"La temperatura della stufatura è sempre entro i 100°C, per limitare la disidratazione del prodotto e dell'ambiente di cottura ed evitare colorazioni e aromi propri della reazione di Maillard."},
+      {n:108, type:"mc", q:"Nella cottura al vapore, il vantaggio del principio di conduzione applicato alle molecole superficiali dell'alimento è che:", opts:["Si raggiungono temperature superiori a quelle della frittura.","Le molecole degli alimenti rimangono al loro interno, senza disperdersi nell'acqua come avviene nella bollitura.","Il vapore disperde gli aromi nell'ambiente di cottura.","La cottura è esclusivamente per irradiamento."], correct:1, exp:"Il vantaggio della cottura al vapore è che le molecole degli alimenti rimangono al loro interno, senza disperdersi nell'acqua come avviene nella bollitura."},
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+const STORAGE_KEY = 'quiz_cucina_v2';
+let state = { answers: {}, marked: {} }; // answers: {n: {chosen, correct}} marked: {n: bool}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+function loadState() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) state = JSON.parse(s);
+  } catch(e){}
+}
+
+// ═══════════════════════════════════════════
+//  BUILD DOM
+// ═══════════════════════════════════════════
+function buildQuiz() {
+  const main = document.getElementById('quiz-main');
+  main.innerHTML = '';
+  const labels = ['A','B','C','D'];
+
+  chapters.forEach((ch, ci) => {
+    const chDiv = document.createElement('div');
+    chDiv.className = 'chapter-section';
+    chDiv.innerHTML = `
+      <div class="chapter-header">
+        <div class="chapter-line"></div>
+        <div class="chapter-label">Capitolo ${ci+1}</div>
+        <div class="chapter-line"></div>
+      </div>
+      <div class="chapter-title">${ch.title}</div>
+      <div class="chapter-subtitle">${ch.subtitle}</div>
+    `;
+
+    ch.qs.forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.id = `q-${q.n}`;
+      card.dataset.n = q.n;
+
+      const ans = state.answers[q.n];
+      const isMarked = state.marked[q.n];
+
+      let typeLabel = q.type === 'vf' ? 'Vero / Falso' : 'Scelta multipla';
+      let optionsHtml = '';
+
+      if (q.type === 'mc') {
+        optionsHtml = `<div class="options">` + q.opts.map((opt, i) => {
+          let cls = '';
+          let icon = '';
+          let disabled = '';
+          if (ans) {
+            disabled = 'disabled';
+            if (i === q.correct) { cls = 'correct'; icon = '<span class="opt-icon">✓</span>'; }
+            else if (i === ans.chosen && !ans.correct) { cls = 'wrong'; icon = '<span class="opt-icon">✗</span>'; }
+          }
+          return `<button class="option-btn ${cls}" ${disabled} onclick="answerMC(${q.n},${i})" data-opt="${i}">
+            <span class="opt-letter">${labels[i]}</span>
+            <span>${opt}</span>
+            ${icon}
+          </button>`;
+        }).join('') + `</div>`;
+      } else {
+        let vcls='', fcls='', vdis='', fdis='';
+        if (ans) {
+          vdis = fdis = 'disabled';
+          if (q.correct === true) { vcls = 'correct'; if (!ans.correct) fcls = 'wrong'; }
+          else { fcls = 'correct'; if (!ans.correct) vcls = 'wrong'; }
+        }
+        optionsHtml = `<div class="vf-options">
+          <button class="vf-btn ${vcls}" ${vdis} onclick="answerVF(${q.n},true)">✓ Vero</button>
+          <button class="vf-btn ${fcls}" ${fdis} onclick="answerVF(${q.n},false)">✗ Falso</button>
+        </div>`;
+      }
+
+      let feedbackHtml = '';
+      if (ans) {
+        const fbCls = ans.correct ? 'correct-fb' : 'wrong-fb';
+        const icon = ans.correct ? '✅' : '❌';
+        let correctLabel = '';
+        if (!ans.correct) {
+          if (q.type === 'mc') {
+            correctLabel = `<span class="correct-answer">Risposta corretta: ${labels[q.correct]}) ${q.opts[q.correct]}</span>`;
+          } else {
+            correctLabel = `<span class="correct-answer">Risposta corretta: ${q.correct ? 'Vero' : 'Falso'}</span>`;
+          }
+        }
+        feedbackHtml = `<div class="feedback ${fbCls} show">
+          <strong>${icon} ${ans.correct ? 'Corretto!' : 'Sbagliato!'}</strong>
+          ${correctLabel}
+          ${q.exp}
+        </div>`;
+      }
+
+      let stampHtml = '';
+      if (ans) {
+        stampHtml = `<span class="answered-stamp ${ans.correct?'ok':'ko'}">${ans.correct?'✓ Corretto':'✗ Sbagliato'}</span>`;
+      }
+
+      let cardCls = '';
+      if (ans) cardCls = ans.correct ? 'answered-correct' : 'answered-wrong';
+      if (isMarked) cardCls += ' marked';
+
+      card.className = `question-card ${cardCls}`;
+      card.innerHTML = `
+        <div class="q-meta">
+          <span class="q-number">Dom. ${q.n}</span>
+          <span class="q-type-badge">${typeLabel}</span>
+          ${stampHtml}
+          <button class="mark-btn ${isMarked?'active':''}" onclick="toggleMark(${q.n})" title="Segna per revisione">🔖</button>
+        </div>
+        <div class="q-text">${q.n}. ${q.q}</div>
+        ${optionsHtml}
+        ${feedbackHtml}
+      `;
+      chDiv.appendChild(card);
+    });
+
+    main.appendChild(chDiv);
+  });
+
+  updateHeader();
+}
+
+// ═══════════════════════════════════════════
+//  ANSWER HANDLERS
+// ═══════════════════════════════════════════
+function answerMC(n, chosen) {
+  if (state.answers[n]) return;
+  const q = findQ(n);
+  const correct = chosen === q.correct;
+  state.answers[n] = { chosen, correct };
+  saveState();
+  updateCard(n);
+  updateHeader();
+}
+
+function answerVF(n, chosen) {
+  if (state.answers[n]) return;
+  const q = findQ(n);
+  const correct = chosen === q.correct;
+  state.answers[n] = { chosen, correct };
+  saveState();
+  updateCard(n);
+  updateHeader();
+}
+
+function findQ(n) {
+  for (const ch of chapters) {
+    const q = ch.qs.find(q => q.n === n);
+    if (q) return q;
+  }
+}
+
+function updateCard(n) {
+  const card = document.getElementById(`q-${n}`);
+  if (!card) return;
+  const q = findQ(n);
+  const ans = state.answers[n];
+  const labels = ['A','B','C','D'];
+  const isMarked = state.marked[n];
+
+  let cardCls = ans ? (ans.correct ? 'answered-correct' : 'answered-wrong') : '';
+  if (isMarked) cardCls += ' marked';
+  card.className = `question-card ${cardCls}`;
+
+  // Update stamp
+  const existing = card.querySelector('.answered-stamp');
+  if (existing) existing.remove();
+  if (ans) {
+    const stamp = document.createElement('span');
+    stamp.className = `answered-stamp ${ans.correct?'ok':'ko'}`;
+    stamp.textContent = ans.correct ? '✓ Corretto' : '✗ Sbagliato';
+    card.querySelector('.q-meta').insertBefore(stamp, card.querySelector('.mark-btn'));
+  }
+
+  // Update buttons
+  if (q.type === 'mc') {
+    card.querySelectorAll('.option-btn').forEach((btn, i) => {
+      btn.disabled = true;
+      btn.querySelector('.opt-icon')?.remove();
+      if (i === q.correct) {
+        btn.classList.add('correct');
+        btn.innerHTML += '<span class="opt-icon">✓</span>';
+      } else if (ans && i === ans.chosen && !ans.correct) {
+        btn.classList.add('wrong');
+        btn.innerHTML += '<span class="opt-icon">✗</span>';
+      }
+    });
+  } else {
+    const [vBtn, fBtn] = card.querySelectorAll('.vf-btn');
+    vBtn.disabled = fBtn.disabled = true;
+    if (q.correct === true) {
+      vBtn.classList.add('correct');
+      if (ans && !ans.correct) fBtn.classList.add('wrong');
+    } else {
+      fBtn.classList.add('correct');
+      if (ans && !ans.correct) vBtn.classList.add('wrong');
+    }
+  }
+
+  // Add feedback
+  let fb = card.querySelector('.feedback');
+  if (!fb) {
+    fb = document.createElement('div');
+    fb.className = 'feedback';
+    card.appendChild(fb);
+  }
+  const fbCls = ans.correct ? 'correct-fb' : 'wrong-fb';
+  const icon = ans.correct ? '✅' : '❌';
+  let correctLabel = '';
+  if (!ans.correct) {
+    if (q.type === 'mc') {
+      correctLabel = `<span class="correct-answer">Risposta corretta: ${labels[q.correct]}) ${q.opts[q.correct]}</span>`;
+    } else {
+      correctLabel = `<span class="correct-answer">Risposta corretta: ${q.correct ? 'Vero' : 'Falso'}</span>`;
+    }
+  }
+  fb.className = `feedback ${fbCls} show`;
+  fb.innerHTML = `<strong>${icon} ${ans.correct ? 'Corretto!' : 'Sbagliato!'}</strong>${correctLabel}${q.exp}`;
+
+  // Animate
+  card.style.transition = 'transform 0.2s';
+  card.style.transform = 'scale(1.01)';
+  setTimeout(() => { card.style.transform = ''; }, 200);
+}
+
+// ═══════════════════════════════════════════
+//  MARK FOR REVIEW
+// ═══════════════════════════════════════════
+function toggleMark(n) {
+  state.marked[n] = !state.marked[n];
+  saveState();
+  const card = document.getElementById(`q-${n}`);
+  const btn = card.querySelector('.mark-btn');
+  if (state.marked[n]) {
+    card.classList.add('marked');
+    btn.classList.add('active');
+    showToast('🔖 Domanda segnata per revisione');
+  } else {
+    card.classList.remove('marked');
+    btn.classList.remove('active');
+    showToast('Segnalibro rimosso');
+  }
+}
+
+// ═══════════════════════════════════════════
+//  HEADER UPDATE
+// ═══════════════════════════════════════════
+function updateHeader() {
+  const total = chapters.reduce((a,c) => a + c.qs.length, 0);
+  const answered = Object.keys(state.answers).length;
+  const correct = Object.values(state.answers).filter(a => a.correct).length;
+  document.getElementById('score-badge').textContent = `✓ ${correct} / ${answered} risposte`;
+  const pct = total > 0 ? (answered / total * 100) : 0;
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+// ═══════════════════════════════════════════
+//  FILTER
+// ═══════════════════════════════════════════
+function filterQuestions(mode) {
+  const allNs = chapters.flatMap(c => c.qs.map(q => q.n));
+  allNs.forEach(n => {
+    const card = document.getElementById(`q-${n}`);
+    if (!card) return;
+    let show = true;
+    if (mode === 'unanswered') show = !state.answers[n];
+    if (mode === 'marked') show = !!state.marked[n];
+    if (mode === 'wrong') show = state.answers[n] && !state.answers[n].correct;
+    card.classList.toggle('hidden', !show);
+  });
+  // Hide/show chapter headers
+  document.querySelectorAll('.chapter-section').forEach(sec => {
+    const anyVisible = [...sec.querySelectorAll('.question-card')].some(c => !c.classList.contains('hidden'));
+    sec.style.display = anyVisible ? '' : 'none';
+  });
+  const labels = {all:'Tutte le domande visibili', unanswered:'Domande non ancora risposte', marked:'Domande segnate 🔖', wrong:'Domande sbagliate ❌'};
+  showToast(labels[mode]);
+}
+
+// ═══════════════════════════════════════════
+//  RESULTS
+// ═══════════════════════════════════════════
+function showResults() {
+  const total = chapters.reduce((a,c) => a + c.qs.length, 0);
+  const answered = Object.keys(state.answers).length;
+  const correct = Object.values(state.answers).filter(a => a.correct).length;
+  const wrong = answered - correct;
+  const unanswered = total - answered;
+  const pct = answered > 0 ? Math.round(correct/answered*100) : 0;
+
+  let emoji = '🏆', msg = 'Eccellente!', scoreClass = 'good';
+  if (pct < 50) { emoji = '📚'; msg = 'Continua a studiare!'; scoreClass = ''; }
+  else if (pct < 70) { emoji = '📖'; msg = 'Buon lavoro, ma puoi migliorare!'; scoreClass = 'ok'; }
+  else if (pct < 90) { emoji = '⭐'; msg = 'Ottimo risultato!'; scoreClass = 'good'; }
+
+  let chapterBreakdown = chapters.map((ch, ci) => {
+    const chCorrect = ch.qs.filter(q => state.answers[q.n]?.correct).length;
+    const chAnswered = ch.qs.filter(q => state.answers[q.n]).length;
+    const chTotal = ch.qs.length;
+    const chPct = chAnswered > 0 ? Math.round(chCorrect/chAnswered*100) : 0;
+    const color = chPct >= 80 ? '#5C7A5C' : chPct >= 60 ? '#B8860B' : '#C0392B';
+    return `<div class="results-chapter">
+      <div>Cap. ${ci+1} — ${ch.title}</div>
+      <span class="ch-score" style="color:${color}">${chCorrect}/${chAnswered} (${chAnswered>0?chPct+'%':'—'})</span>
+    </div>`;
+  }).join('');
+
+  const box = document.getElementById('results-box');
+  box.innerHTML = `
+    <div class="results-emoji">${emoji}</div>
+    <div class="results-title">${msg}</div>
+    <div class="results-score-big ${scoreClass}">${pct}%</div>
+    <div class="results-sub">${correct} corrette su ${answered} risposte (${unanswered} non ancora risposte)</div>
+    <div class="results-breakdown">
+      <div class="breakdown-item green"><span class="bi-num">${correct}</span><span class="bi-label">Corrette</span></div>
+      <div class="breakdown-item red"><span class="bi-num">${wrong}</span><span class="bi-label">Sbagliate</span></div>
+      <div class="breakdown-item yellow"><span class="bi-num">${unanswered}</span><span class="bi-label">Non risposte</span></div>
+      <div class="breakdown-item"><span class="bi-num">${Object.values(state.marked).filter(Boolean).length}</span><span class="bi-label">Segnate 🔖</span></div>
+    </div>
+    <div style="margin-bottom:8px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#aaa;">Per capitolo</div>
+    ${chapterBreakdown}
+    ${unanswered > 0 ? `<div style="margin-top:12px;padding:12px;background:#FFF8E1;border-radius:8px;font-size:0.82rem;color:#7a5c00;text-align:center;">💡 Hai ancora <strong>${unanswered}</strong> domande a cui non hai risposto!</div>` : ''}
+    <div class="results-actions">
+      <button class="res-btn secondary" onclick="closeResults()">Chiudi</button>
+      <button class="res-btn primary" onclick="filterQuestions('wrong'); closeResults();">Ripassa gli errori ❌</button>
+    </div>
+  `;
+  document.getElementById('results-panel').classList.add('show');
+}
+
+function closeResults() {
+  document.getElementById('results-panel').classList.remove('show');
+}
+
+document.getElementById('results-panel').addEventListener('click', function(e) {
+  if (e.target === this) closeResults();
+});
+
+// ═══════════════════════════════════════════
+//  RESET
+// ═══════════════════════════════════════════
+function confirmReset() {
+  if (confirm('Sei sicuro di voler ricominciare il quiz da capo? Tutti i progressi verranno cancellati.')) {
+    state = { answers: {}, marked: {} };
+    saveState();
+    buildQuiz();
+    filterQuestions('all');
+    showToast('🔄 Quiz azzerato. Buono studio!');
+  }
+}
+
+// ═══════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+loadState();
+buildQuiz();
+</script>
+</body>
+</html>
