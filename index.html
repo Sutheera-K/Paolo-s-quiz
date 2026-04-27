@@ -19,6 +19,9 @@
     --gold: #B8860B;
     --gold-light: #D4A017;
     --terracotta: #C17F52;
+    --advanced: #4A3F6B;
+    --advanced-light: #7B6EA0;
+    --advanced-bg: #F0EDF8;
     --light-border: #D4C9B0;
     --correct-bg: #EBF5EB;
     --wrong-bg: #FBE9E7;
@@ -124,24 +127,94 @@
   }
   .ctrl-btn:hover { background: var(--espresso); color: var(--cream); border-color: var(--espresso); }
   .ctrl-btn.danger:hover { background: var(--tomato); border-color: var(--tomato); color: #fff; }
-  .filter-label { font-size: 0.78rem; color: #888; margin-left: auto; }
-  .filter-select {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem;
-    padding: 6px 10px;
-    border: 1.5px solid var(--light-border);
-    border-radius: 20px;
-    background: var(--warm-white);
-    color: var(--espresso);
-    cursor: pointer;
-    outline: none;
-  }
 
   /* ── MAIN CONTENT ── */
   main {
     max-width: 900px;
     margin: 0 auto;
     padding: 32px 24px 80px;
+  }
+
+  /* ── SECTION DIVIDER (Advanced Quiz Banner) ── */
+  .section-divider {
+    margin: 60px 0 48px;
+    position: relative;
+  }
+  .section-divider-line {
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--advanced), transparent);
+    opacity: 0.4;
+  }
+  .section-divider-banner {
+    background: linear-gradient(135deg, var(--advanced) 0%, #6B5A9E 100%);
+    border-radius: 14px;
+    padding: 28px 32px;
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(74,63,107,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .section-divider-banner::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .section-divider-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; left: 40px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .adv-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    margin-bottom: 12px;
+  }
+  .adv-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .adv-subtitle {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    line-height: 1.5;
+    max-width: 560px;
+  }
+  .adv-stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .adv-stat {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.8rem;
+    opacity: 0.85;
+  }
+  .adv-stat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    opacity: 1;
   }
 
   /* ── CHAPTER DIVIDERS ── */
@@ -153,6 +226,7 @@
   }
   .chapter-header:first-child { margin-top: 0; }
   .chapter-line { flex: 1; height: 1px; background: var(--light-border); }
+  .chapter-line.adv { background: rgba(74,63,107,0.25); }
   .chapter-label {
     font-family: 'Playfair Display', serif;
     font-size: 0.75rem;
@@ -162,6 +236,7 @@
     color: var(--terracotta);
     white-space: nowrap;
   }
+  .chapter-label.adv { color: var(--advanced-light); }
   .chapter-title {
     text-align: center;
     font-family: 'Playfair Display', serif;
@@ -191,6 +266,9 @@
     position: relative;
     scroll-margin-top: 130px;
   }
+  .question-card.adv-card {
+    border-left: 3px solid rgba(74,63,107,0.2);
+  }
   .question-card.answered-correct {
     border-color: var(--sage-light);
     background: var(--correct-bg);
@@ -218,6 +296,10 @@
     background: rgba(193,127,82,0.12);
     padding: 2px 8px;
     border-radius: 10px;
+  }
+  .q-number.adv {
+    color: var(--advanced-light);
+    background: rgba(74,63,107,0.1);
   }
   .q-type-badge {
     font-size: 0.68rem;
@@ -427,8 +509,18 @@
   .breakdown-item.green .bi-num { color: var(--sage); }
   .breakdown-item.red .bi-num { color: var(--tomato); }
   .breakdown-item.yellow .bi-num { color: var(--gold); }
+  .results-section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #bbb;
+    margin: 16px 0 8px;
+    padding-left: 4px;
+  }
+  .results-section-label.adv { color: var(--advanced-light); }
   .results-chapter {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     padding: 12px 16px;
     background: var(--cream);
     border-radius: 8px;
@@ -436,6 +528,10 @@
     justify-content: space-between;
     align-items: center;
     font-size: 0.85rem;
+  }
+  .results-chapter.adv-chapter {
+    background: rgba(74,63,107,0.05);
+    border-left: 3px solid rgba(74,63,107,0.2);
   }
   .results-chapter span { font-weight: 600; }
   .ch-score { font-family: 'DM Mono', monospace; }
@@ -492,6 +588,7 @@
     .results-breakdown { grid-template-columns: 1fr 1fr; }
     .header-inner { gap: 10px; }
     main { padding: 20px 14px 60px; }
+    .adv-title { font-size: 1.3rem; }
   }
 </style>
 </head>
@@ -526,7 +623,7 @@
 
 <script>
 // ═══════════════════════════════════════════
-//  QUIZ DATA
+//  QUIZ DATA — BASE (Capitoli 1-4)
 // ═══════════════════════════════════════════
 const chapters = [
   {
@@ -583,7 +680,7 @@ const chapters = [
       {n:42, type:"mc", q:"Il farinografo di Brabender, inventato negli anni '30 del Novecento, serve a:", opts:["Misurare il punto di fumo degli oli.","Registrare graficamente la resistenza dell'impasto in funzione del tempo, individuando idratazione ottimale, sviluppo, stabilità e indice di caduta.","Misurare la quantità di glutine residuo dopo la cottura.","Soffiare aria nei dischetti di impasto per simulare la lievitazione."], correct:1, exp:"Il farinografo registra graficamente — tramite pennino mobile su carta — la resistenza dell'impasto in funzione del tempo, fornendo idratazione ottimale, tempo di sviluppo, stabilità e indice di caduta."},
       {n:43, type:"mc", q:"Quanti minuti di impastamento riescono a sopportare le farine di qualità eccellente, secondo il farinografo?", opts:["Non più di 3 minuti.","Circa 5 minuti.","Anche tempi superiori ai 10 minuti.","Esattamente 7 minuti."], correct:2, exp:"Farine di bassa qualità non reggono più di 3 minuti di impastamento, mentre farine di qualità eccellente possono reggere anche tempi superiori ai 10 minuti."},
       {n:44, type:"mc", q:"Le trafile in teflon, rispetto a quelle in bronzo, producono pasta:", opts:["Più rugosa, perché il teflon è un materiale ruvido.","Meno rugosa, perché il teflon è più liscio del bronzo.","Identica nell'aspetto superficiale.","Più friabile dopo la cottura."], correct:1, exp:"Le trafile in teflon, essendo più lisce di quelle in bronzo, danno un risultato meno «rugoso»."},
-      {n:45, type:"mc", q:"Quale norma legislativa regolamenta in Italia farine, sfarinati di grano duro e paste alimentari, sostituendo la legge 580 del 1967?", opts:["Il D.P.R. 187/2001 del 9 febbraio 2001.","Il Reg. (UE) 1308/2013.","Il Decreto Presidenziale 22 febbraio 2001 n° 187.","Sia A che C: il D.P.R. 187/2001, che si articola in CAPO I (farine e sfarinati di grano duro) e CAPO II (paste alimentari)."], correct:3, exp:"Il D.P.R. 187/2001 del 9 febbraio 2001, che sostituisce la legge 580 del 1967, regolamenta al CAPO I farine e sfarinati di grano duro e al CAPO II la pasta alimentare. Il Decreto Presidenziale 22 febbraio 2001 n° 187 è la stessa norma citata in tabella."},
+      {n:45, type:"mc", q:"Quale norma legislativa regolamenta in Italia farine, sfarinati di grano duro e paste alimentari, sostituendo la legge 580 del 1967?", opts:["Il D.P.R. 187/2001 del 9 febbraio 2001.","Il Reg. (UE) 1308/2013.","Il Decreto Presidenziale 22 febbraio 2001 n° 187.","Sia A che C: il D.P.R. 187/2001, che si articola in CAPO I (farine e sfarinati di grano duro) e CAPO II (paste alimentari)."], correct:3, exp:"Il D.P.R. 187/2001 del 9 febbraio 2001, che sostituisce la legge 580 del 1967, regolamenta al CAPO I farine e sfarinati di grano duro e al CAPO II la pasta alimentare."},
       {n:46, type:"vf", q:"I granuli di farina di grano tenero hanno una forma sferica, mentre quelli di semola hanno contorni più spigolosi.", correct:true, exp:"I granuli di farina di grano tenero hanno forma sferica; quelli di semola hanno contorni più spigolosi. Il grano tenero ha inoltre in generale un contenuto proteico inferiore al grano duro."},
       {n:47, type:"mc", q:"Le tajerin (formato di pasta lunga) sono caratterizzate dal fatto di essere:", opts:["Realizzate con solo albume.","Spesse 2 cm.","Realizzate con solo tuorlo, larghezza 2 mm.","Frastagliate sui bordi, larghe 0,7 cm."], correct:2, exp:"I tajerin sono pasta lunga di solo tuorlo, larghezza 2 mm. Le tagliatelle sono 0,7 cm; le pappardelle 2 cm; le reginette sono frastagliate, larghe 2 cm."},
       {n:48, type:"mc", q:"Quale tra i seguenti formati di pasta corta è realizzato con sola acqua e farina (senza uovo)?", opts:["Corzetti.","Trofie.","Tortelli.","Cappelletti."], correct:1, exp:"Le trofie sono di acqua e farina. I corzetti sono di vino, acqua e farina; tortelli e cappelletti sono paste fresche ripiene."},
@@ -660,14 +757,99 @@ const chapters = [
       {n:107, type:"vf", q:"La stufatura avviene sempre entro i 100°C, allo scopo di limitare la disidratazione del prodotto e dell'ambiente di cottura ed evitare le colorazioni e gli aromi tipici della reazione di Maillard.", correct:true, exp:"La temperatura della stufatura è sempre entro i 100°C, per limitare la disidratazione del prodotto e dell'ambiente di cottura ed evitare colorazioni e aromi propri della reazione di Maillard."},
       {n:108, type:"mc", q:"Nella cottura al vapore, il vantaggio del principio di conduzione applicato alle molecole superficiali dell'alimento è che:", opts:["Si raggiungono temperature superiori a quelle della frittura.","Le molecole degli alimenti rimangono al loro interno, senza disperdersi nell'acqua come avviene nella bollitura.","Il vapore disperde gli aromi nell'ambiente di cottura.","La cottura è esclusivamente per irradiamento."], correct:1, exp:"Il vantaggio della cottura al vapore è che le molecole degli alimenti rimangono al loro interno, senza disperdersi nell'acqua come avviene nella bollitura."},
     ]
+  },
+
+  // ═══════════════════════════════════════════
+  //  QUIZ AVANZATO — Capitoli 5-8
+  // ═══════════════════════════════════════════
+  {
+    title: "Fondi e Salse: Analisi e Applicazione",
+    subtitle: "Capitolo 5 (Avanzato) — Ragionamento, confronti, casi pratici",
+    advanced: true,
+    sectionBreak: true,
+    qs: [
+      {n:109, type:"mc", q:"Uno chef sta preparando un fondo destinato a essere usato come base per una salsa demi-glace. Per errore, il commis ha dimenticato di tostare gli ossi e di rosolare la mirepoix prima della bollitura. Qual è la conseguenza tecnica MAGGIORE di questo errore?", opts:["Il fondo non potrà essere ridotto, perché manca la concentrazione zuccherina.","Il fondo risulterà comunque utilizzabile per una demi-glace, basta prolungarne la cottura.","Si è ottenuto di fatto un fondo bianco, privo della reazione di Maillard e dell'eventuale caramellizzazione: mancano le colorazioni scure e i sapori complessi richiesti dalla demi-glace.","Le proteine non potranno coagulare correttamente, rendendo la salsa torbida."], correct:2, exp:"I fondi bruni si ottengono proprio attraverso stufatura/rosolatura degli aromatici e arrostitura/tostatura degli elementi nutritivi, processi che attivano caramellizzazione e Maillard. Saltare queste fasi significa, di fatto, ottenere un fondo bianco. La demi-glace richiede il profilo bruno: nessun prolungamento della cottura può sostituire reazioni che non sono state innescate."},
+      {n:110, type:"mc", q:"Confronta velouté di pesce, salsa Normanna e salsa Diplomatica. Quale affermazione è coerente con la classificazione gerarchica?", opts:["Sono tre salse madri bianche distinte.","La velouté di pesce è madre, la Normanna è derivata dalla velouté di pesce, la Diplomatica è composta a partire dalla Normanna.","La Diplomatica è madre, la Normanna è derivata e la velouté di pesce è composta.","Sono tutte salse composte ottenute combinando madri bianche e madri brune."], correct:1, exp:"La gerarchia è: madre = velouté di pesce; derivata = Normanna (velouté di pesce + brodo funghi + brodo cozze + fumetto sogliola + limone + tuorlo + panna); composta = Diplomatica (Normanna + burro/polpa di astice + tartufo nero in brunoise). Le composte si ottengono «a partire da una derivata»."},
+      {n:111, type:"vf", q:"La salsa Villeroy al pomodoro, essendo ottenuta dalla Villeroy (che a sua volta deriva dalla Parigina), può essere classificata come «derivata di derivata», ovvero salsa composta secondo la definizione delle slide.", correct:true, exp:"Le slide definiscono la composta come ottenuta «a partire da una derivata alla quale vengono aggiunti uno o più ingredienti». La Villeroy è derivata dalla Parigina (madre); la Villeroy al pomodoro aggiunge passato di pomodoro alla Villeroy: rientra perfettamente nella definizione di composta."},
+      {n:112, type:"mc", q:"Un cliente con allergia al lattosio ti chiede di preparargli una salsa Mornay. Quale affermazione tecnica è corretta?", opts:["Si può preparare normalmente: la besciamella non contiene lattosio.","È inevitabile la presenza di lattosio: la Mornay parte da besciamella (latte + roux bianco), a cui si aggiungono tuorlo d'uovo e formaggio. Servirebbe una rielaborazione completa.","Basta sostituire il formaggio con tuorlo d'uovo aggiuntivo.","Si può sostituire la Mornay con la Soubise, che è priva di latticini."], correct:1, exp:"La Mornay è besciamella + tuorlo + formaggio; la besciamella è latte + roux bianco. Il latte porta lattosio, e il formaggio in genere ne contiene anch'esso. Non si può ottenere una Mornay tradizionale senza latticini. (D è scorretta: anche la Soubise parte da besciamella.)"},
+      {n:113, type:"mc", q:"Mettendo a confronto la salsa Bearnese e l'Olandese, quale è la principale differenza tecnica?", opts:["La Bearnese usa olio al posto del burro.","L'Olandese contiene tuorlo d'uovo, la Bearnese no.","La Bearnese è di fatto un'Olandese in cui la riduzione di vino bianco e scalogno è sostituita da una riduzione all'aceto al dragoncello e scalogno tritato, con aggiunta finale di dragoncello, cerfoglio e pepe nero tritati grossolanamente.","L'Olandese è una salsa derivata della Bearnese."], correct:2, exp:"La Bearnese è una variante dell'olandese in cui cambia il profilo aromatico e l'acido (aceto al dragoncello). Entrambe contengono tuorlo d'uovo."},
+      {n:114, type:"mc", q:"Le slide sottolineano che salsa Parigina e salsa Suprême sono tecnicamente derivate dalla velouté, ma vengono classificate come madri. Quale ragionamento spiega meglio la coerenza interna di questa scelta?", opts:["Una classificazione tassonomica può essere informata da criteri di uso pratico e versatilità in cucina, non solo dall'origine genealogica: due salse facili da ottenere e largamente impiegate possono essere promosse a base operativa.","Escoffier non conosceva il concetto di derivazione e le ha classificate per analogia visiva.","Si tratta di un errore di catalogazione mai corretto.","La Parigina e la Suprême non condividono ingredienti con la velouté."], correct:0, exp:"Escoffier giustificò questa catalogazione per «l'estrema facilità di ottenimento» dalla velouté e per «versatilità e largo utilizzo nella cucina dell'epoca», tanto da considerarle «vere e proprie salse bianche di base». È un caso di criterio funzionale che prevale su quello genealogico."},
+      {n:115, type:"mc", q:"Devi progettare una salsa di accompagnamento per un piatto di selvaggina (cervo): sapore deciso, leggermente piccante e marcata acidità. Quale percorso «madre → derivata → composta» è più coerente?", opts:["Olandese → Maltese → Foyot.","Spagnola → Poivrade → Diana.","Velouté di pesce → Normanna → Diplomatica.","Besciamella → Soubise → Villageoise."], correct:1, exp:"Per selvaggina serve un profilo bruno deciso. La Spagnola è madre bruna; la Poivrade aggiunge mirepoix/matignon rosolate, aceto di vino rosso e pepe nero (acidità, piccantezza); la Diana, derivando dalla Poivrade, aggiunge panna montata, tartufo nero e albume sodo. (A: profilo leggero; C: di pesce; D: troppo lattica.)"},
+      {n:116, type:"vf", q:"La Demi-glace ottenuta «per diluizione» (glassa di carne + fondo bruno di carne) ha la stessa origine concettuale di quella ottenuta «per riduzione», ma rappresenta il percorso inverso: si parte da una sostanza già concentrata e la si riporta a consistenza di salsa.", correct:true, exp:"La demi-glace per riduzione concentra progressivamente un fondo; per diluizione si parte da una glassa di carne già concentrata e la si «apre» con fondo bruno fino a consistenza di salsa. Concettualmente è la stessa salsa, ottenuta percorrendo la curva di concentrazione in versi opposti."},
+      {n:117, type:"mc", q:"Vuoi insaporire un piatto a base di pesce con una salsa che richiami il fondo del prodotto principale (pesce) e un'acidità delicata. Tra le derivate citate, qual è la scelta più tecnicamente coerente?", opts:["Aurora (velouté di pollame + passato di pomodoro maturo).","Albufera (suprême + glassa di carne + burro di peperone).","Ravigote (velouté di grasso + riduzione di vino bianco e aceto + burro di scalogno + cerfoglio, dragoncello ed erba cipollina tritati).","Robert (demi-glace + cipolla stufata + senape + zucchero)."], correct:2, exp:"La Ravigote è l'unica opzione con acidità delicata (riduzione di vino bianco e aceto). Le altre tre sono incompatibili con il pesce: Aurora di pollame con pomodoro, Albufera di carne con peperone, Robert di carne con senape."},
+      {n:118, type:"mc", q:"Un cuoco descrive il suo procedimento: «ho preso una velouté di pollame, ho aggiunto passato di pomodoro maturo, poi ho montato il composto con panna semimontata». Cosa puoi dire della salsa risultante?", opts:["È una corretta preparazione della Mousseline calda.","È una salsa Aurora arricchita con panna semimontata: rappresenta una composta non standard, perché la Mousseline (Chantilly) calda nasce dall'olandese, non dalla velouté.","È la classica Suprême con aggiunta di pomodoro.","È una variante della salsa Diana."], correct:1, exp:"La Mousseline calda nasce dall'olandese (olandese + panna semimontata); la Mousseline fredda dalla maionese. Aggiungere panna semimontata a una velouté di pollame con pomodoro (Aurora) produce una composta «non standard», fuori dalla nomenclatura classica."},
+    ]
+  },
+  {
+    title: "Pasta e Farine: Diagnosi e Casi Pratici",
+    subtitle: "Capitolo 6 (Avanzato) — Alveografia, reologia, dati merceologici",
+    advanced: true,
+    qs: [
+      {n:119, type:"mc", q:"Stai scegliendo una farina per un panettone (grande lievitato con lunga lievitazione, alta idratazione, presenza di zuccheri e burro che indeboliscono la maglia glutinica). Quale profilo di farina è più adatto?", opts:["Farina debole (W 120-160), perché il panettone non deve essere elastico.","Farina media (W 160-250), perché compatibile con una qualunque lievitazione.","Farina forte (W 250-300), perché capace di assorbire fino al 75% di acqua e di reggere lievitazioni prolungate.","Semola di grano duro, in quanto unica farina compatibile con lievitati industriali."], correct:2, exp:"I grandi lievitati richiedono farine forti (W 250-300), capaci di assorbire fino al 75% di acqua e di reggere lunghe lievitazioni e impasti complessi. Una debole crollerebbe; una media non avrebbe sufficiente «ossatura» glutinica."},
+      {n:120, type:"mc", q:"Hai a disposizione un farinogramma di Brabender che mostra una stabilità di soli 2 minuti e una fase di rammollimento estremamente rapida. Quale conclusione tecnica puoi trarre?", opts:["È una farina di forza, adatta ai grandi lievitati.","È una farina di bassa qualità: farine scadenti non reggono più di 3 minuti di impastamento.","È una farina integrale di alto pregio.","È una semola di grano duro."], correct:1, exp:"Farine di bassa qualità non reggono più di 3 minuti di impastamento, mentre farine di qualità eccellente possono reggere anche tempi superiori ai 10 minuti. Una stabilità di 2 minuti rientra chiaramente nella prima fascia."},
+      {n:121, type:"vf", q:"Due alveogrammi con uguale W ma rapporto P/L molto diverso (uno con P/L ≈ 0,3 e l'altro con P/L ≈ 1,2) descrivono farine con la stessa «forza» ma comportamento reologico differente: la prima è prevalentemente estensibile, la seconda prevalentemente tenace.", correct:true, exp:"W misura il «lavoro» complessivo (area sottesa alla curva), mentre P/L è un indice di forma della curva. Due farine possono avere stesso W ma curva differente, traducendosi in comportamenti reologici diversi: più estensibile (P/L basso) o più tenace (P/L alto)."},
+      {n:122, type:"mc", q:"Un produttore di pasta secca artigianale lamenta che la sua pasta «non tiene» bene le salse al pomodoro: il sugo scivola dalla superficie. Considerando solo i fattori discussi, quale intervento è più razionale?", opts:["Sostituire la semola di grano duro con farina di grano tenero per aumentare l'amido superficiale.","Ridurre la quantità di acqua nell'impasto al 30%.","Sostituire le trafile in teflon con trafile in bronzo: producono una superficie più rugosa, capace di trattenere meglio i condimenti.","Aumentare la temperatura di estrusione per favorire la reazione di Maillard sulla pasta."], correct:2, exp:"Le trafile in teflon, essendo più lisce del bronzo, danno pasta meno rugosa. Una pasta più rugosa trattiene meglio i sughi: invertire al bronzo è la mossa tecnica corretta."},
+      {n:123, type:"mc", q:"Esami al microscopio mostrano, nell'impasto di pasta fresca durante la cottura a 95°C, una maglia glutinica «callosa» ben sviluppata. Cosa accadrebbe se si prolungasse di molto la cottura mantenendo temperatura ben superiore ai 95°C?", opts:["La maglia glutinica diventerebbe progressivamente più elastica.","Il glutine, se troppo cotto, perderebbe nuovamente la struttura callosa, mentre i granuli di amido si disgregherebbero.","L'amido si gelificherebbe per la prima volta.","Si avvierebbe la reazione di Maillard sulla pasta."], correct:1, exp:"Il glutine, se troppo cotto, perde nuovamente la struttura callosa mentre i granuli di amido si disgregano: è esattamente il quadro della pasta scotta."},
+      {n:124, type:"mc", q:"Confrontando due impasti di pari peso e idratazione, l'uno con il 60% di gliadine sul totale proteico, l'altro con il 60% di glutenine, ti aspetti che:", opts:["L'impasto ricco di gliadine sia molto tenace e poco estensibile.","L'impasto ricco di glutenine sia tenace ed elastico, mentre quello ricco di gliadine sia estensibile.","I due impasti siano identici, perché entrambe le proteine formano glutine.","Solo l'impasto ricco di gliadine assorba acqua."], correct:1, exp:"Le glutenine rendono l'impasto tenace ed elastico; le gliadine lo rendono estensibile. Pur formando entrambe glutine, hanno ruoli funzionalmente distinti che cambiano il carattere reologico dell'impasto."},
+      {n:125, type:"mc", q:"Una farina di tipo «1» e una farina «integrale» si differenziano non solo per il colore. Quale relazione, basata sui dati normativi, è corretta?", opts:["Stesso contenuto minimo proteico (12%), ma diverso intervallo di ceneri: max 0,8% per la tipo 1, e 1,3-1,7% per l'integrale.","Stesso intervallo di ceneri ma proteine più alte nell'integrale.","La farina integrale ha proteine inferiori alla tipo 1.","La tipo 1 è più scura dell'integrale, perché meno raffinata."], correct:0, exp:"Tipo 1: ceneri max 0,8%, proteine min 12%; integrale: ceneri min 1,3% max 1,7%, proteine min 12%. Stessa proteina minima, ma ceneri molto diverse: l'integrale è più «cenerosa» perché contiene tutto il chicco."},
+      {n:126, type:"vf", q:"Poiché l'amido inizia a gelificare già a 60°/70°C ma il glutine necessita di raggiungere i 95°C per assumere struttura callosa, in una pasta cotta a temperature controllate (es. cottura sottovuoto a 75°C) si potrebbe ottenere amido gelificato ma struttura proteica non completamente stabilizzata.", correct:true, exp:"A 75°C l'amido è già in fase di gelificazione (soglia: 60-70°C) e il glutine è in fase iniziale di denaturazione (soglia: 70°C), ma non ancora del tutto strutturato (struttura callosa dai 95°C)."},
+      {n:127, type:"mc", q:"Le testimonianze attestano: 1100/1165 — pasta a Trabia (Idrisi); 1371 — calmiere siciliano sulla pasta. Quale interpretazione storico-economica è meglio supportata?", opts:["Il calmiere indica che nel 1371 la pasta era ancora un alimento di lusso, riservato a corti aristocratiche.","Il calmiere è una legge che limita il prezzo di un bene di larga diffusione: la sua esistenza implica che la pasta fosse già di larga diffusione e di prima necessità, coerente con la testimonianza di Idrisi che descrive una produzione orientata all'esportazione.","Il calmiere riguardava solo la lagana e non le triya.","Le due testimonianze si contraddicono."], correct:1, exp:"Un calmiere limita il prezzo di un bene alimentare di larga diffusione: la sua esistenza implica che la pasta fosse già un genere di largo consumo, di prima necessità. Coerente con Idrisi, che descrive una produzione orientata all'export."},
+      {n:128, type:"mc", q:"Gli arabi, popolo nomade, necessitavano di alimenti trasportabili come le paste secche. Quale conclusione tecnico-storica si può trarre con maggiore coerenza?", opts:["La forma secca della pasta nasce in funzione della shelf-life e della trasportabilità, non per ragioni di gusto: la pasta secca risolve un problema logistico prima di diventare cultura gastronomica.","La pasta secca è stata inventata dai greci e adottata dagli arabi.","Le triya erano paste fresche, mentre la pasta secca compare solo nel XVI secolo.","Il consumo di pasta secca è incompatibile con popoli nomadi."], correct:0, exp:"La pasta secca è esplicitamente collegata alla logistica nomade araba: prima funzione (conservazione/trasporto), poi cultura gastronomica."},
+      {n:129, type:"mc", q:"A Napoli, tra il XVI e il XVII secolo, il gusto della pasta cambia da «fondente» (cotture di anche un'ora) ad «al dente». Quale lettura tecnica è più coerente?", opts:["Una cottura di un'ora porta alla disgregazione dei granuli di amido e alla perdita della struttura callosa del glutine: il passaggio al gusto «al dente» va letto come arrivo a una cottura tecnicamente ottimale, non come semplice cambio di moda.","La cottura «al dente» disattiva la reazione di Maillard e migliora il sapore.","La cottura lunga è preferibile dal punto di vista nutrizionale.","Il cambio di gusto è dovuto unicamente all'introduzione del torchio a trafila."], correct:0, exp:"Una cottura prolungata porta alla disgregazione dei granuli di amido e alla perdita della struttura callosa del glutine. Il passaggio al gusto «al dente» coincide tecnicamente con una cottura ottimale, non è un semplice cambio di moda."},
+      {n:130, type:"vf", q:"L'introduzione, nel XVII secolo, della gramola a stanga e, nel XVIII secolo, del torchio a trafila ha avuto come conseguenza tecnica diretta il superamento della lavorazione manuale degli impasti, rendendo possibili impasti più consistenti e formati di pasta più complessi.", correct:true, exp:"L'introduzione della gramola a stanga e del torchio a trafila rappresenta un salto tecnologico che ha permesso impasti più lavorati e una varietà di formati maggiore, coerente con l'evoluzione storica descritta."},
+      {n:131, type:"mc", q:"Confrontando capelli d'angelo (1 mm di sezione) e tagliatelle (0,7 cm di larghezza), quale considerazione tecnico-pratica è più solida?", opts:["I capelli d'angelo, avendo sezione molto sottile, richiedono cotture estremamente brevi: una cottura prolungata porterebbe rapidamente alla disgregazione dell'amido e alla perdita della struttura. Le tagliatelle, di sezione molto maggiore, ammettono tempi di cottura più lunghi.","Le tagliatelle si cuociono prima dei capelli d'angelo perché più larghe.","Entrambi i formati richiedono lo stesso tempo, perché contano solo gli ingredienti.","I capelli d'angelo si cuociono solo arrostiti, come le antiche lagane."], correct:0, exp:"Sezione = volume di calore da trasmettere fino al cuore. I capelli d'angelo (1 mm) hanno sezione minima → cottura velocissima. Le tagliatelle (7 mm) tollerano più tempo. Applicazione diretta dei principi termici di conduzione."},
+      {n:132, type:"mc", q:"Trafili la stessa pasta con (a) bassa pressione/velocità, trafila in bronzo, e (b) alta pressione/velocità, trafila in teflon. Quale risultato superficiale ti aspetti?", opts:["(a) e (b) saranno identiche, perché conta solo l'impasto.","(a) avrà una superficie più rugosa di (b): la rugosità deriva sia dal materiale della trafila (il bronzo è meno liscio del teflon) sia dalla forza/velocità di estrusione, che in (a) spingono verso più rugosità.","(b) avrà una superficie più rugosa di (a), perché alta velocità = più ruvidezza.","Solo (a) sarà commestibile."], correct:1, exp:"La rugosità dipende sia dal materiale della trafila (bronzo più ruvido del teflon) sia dalla forza/velocità di estrusione. In (a) entrambi i fattori spingono verso più rugosità; in (b) entrambi spingono verso meno rugosità."},
+    ]
+  },
+  {
+    title: "Il Riso: Ragionamento Merceologico",
+    subtitle: "Capitolo 7 (Avanzato) — Confronti varietali, classificazioni IT/UE",
+    advanced: true,
+    qs: [
+      {n:133, type:"mc", q:"Devi scegliere una varietà di riso per un risotto alla milanese (assorbimento elevato, buon rilascio d'amido). Tra Carnaroli (L 6,9 mm; Lungo A Superfine) e Vialone Nano (L 5,7 mm; Medio Semifine), quale ragionamento è più solido?", opts:["Il Vialone Nano è sempre da preferire perché di classe inferiore.","Entrambi sono storicamente impiegati nei risotti italiani; il Carnaroli è apprezzato per la tenuta in cottura grazie alla taglia maggiore; il Vialone Nano è prediletto in area veneta per il rilascio di amido. Sono scelte tecniche diverse, non gerarchiche.","Solo il Carnaroli è classificato come riso da risotto.","Il Vialone Nano è un riso indica e quindi non adatto al risotto."], correct:1, exp:"Le slide non gerarchizzano le varietà: Carnaroli e Vialone Nano sono entrambi cultivar japonica italiane. Scelte tecnicamente diverse per stili di risotto diversi, non una «migliore» dell'altra. (D errata: entrambi sono japonica.)"},
+      {n:134, type:"mc", q:"Sull'etichetta di un sacco di riso leggi «lunghezza 6,1 mm; rapporto lunghezza/larghezza = 2,8». Secondo il Reg. (UE) 1308/2013, in quale categoria rientra?", opts:["Riso a grani tondi (originario).","Riso a grani medi.","Riso a grani lunghi A: lunghezza > 6,0 mm e rapporto compreso tra 2 e 3 (esclusi).","Riso a grani lunghi B: lunghezza > 6,0 mm e rapporto ≥ 3."], correct:2, exp:"Lungo A = lunghezza > 6,0 mm e rapporto > 2 e < 3. Con L = 6,1 mm e rapporto 2,8 → Lungo A."},
+      {n:135, type:"vf", q:"Una varietà di Oryza sativa sottospecie indica e una varietà di Oryza sativa sottospecie japonica appartengono alla stessa specie biologica e quindi sono interscambiabili in cucina, purché abbiano la stessa lunghezza del chicco.", correct:false, exp:"Stessa specie biologica non significa equivalenza in cucina: japonica e indica differiscono profondamente nel comportamento in cottura, nel contenuto di amilosio/amilopectina e nel profilo organolettico. La lunghezza del chicco da sola non determina le proprietà culinarie."},
+      {n:136, type:"mc", q:"Confronta il Baldo (genealogia Arborio × St 136, anno 1964) e il suo «genitore» Arborio (Vialone × Lady Wright, 1946). Quale affermazione è coerente con i dati?", opts:["Hanno entrambi cariosside di lunghezza e larghezza identiche, essendo cultivar consanguinee.","Sono entrambi Lungo A (Superfine), ma differiscono nelle dimensioni: l'Arborio è 7 × 3,4 mm (rapporto 2,1); il Baldo è 6,9 × 3 mm (rapporto 2,3) — il Baldo è quindi proporzionalmente più «slanciato».","Il Baldo è classificato come Tondo Originario.","Sono cultivar di sottospecie diverse (japonica vs indica)."], correct:1, exp:"Arborio: 7 × 3,4 mm (ratio 2,1); Baldo: 6,9 × 3 mm (ratio 2,3). Entrambi Lungo A Superfine. Il Baldo, pur derivando dall'Arborio, ha proporzioni leggermente più «slanciate» (rapporto maggiore). (D errata: entrambi sono japonica.)"},
+      {n:137, type:"mc", q:"Un consumatore vuole il massimo apporto nutrizionale e il minimo trattamento. Considerando le lavorazioni descritte, l'opzione tecnicamente più coerente è il riso:", opts:["Brillato, perché addizionato di glucosio in polvere.","Camolino, perché trattato con olio di lino.","Semigreggio (integrale), che mantiene la maggior parte degli strati esterni della cariosside e quindi i nutrienti in pula, germe e strati esterni.","Mercantile, primo prodotto della sbiancatura."], correct:2, exp:"Le lavorazioni «migliorano e allungano la conservazione» a costo di perdita di nutrienti negli strati esterni. Il semigreggio è il primo riso commercializzabile dopo la sbramatura e preserva quasi tutti gli strati esterni, quindi i nutrienti."},
+      {n:138, type:"mc", q:"Quale affermazione sintetizza meglio il paradosso tecnico del processo di parboiling?", opts:["Il parboiling distrugge il germe.","Pur essendo un processo che precede la raffinazione, il parboiling consente di conservare nutrienti che altrimenti andrebbero perduti: la cottura parziale fa migrare la tiamina verso l'endosperma e fa aderire l'aleurone all'endosperma, salvandoli dall'eliminazione con la pula.","Il parboiling sostituisce completamente la sbiancatura.","Il parboiling aumenta direttamente il contenuto proteico del riso."], correct:1, exp:"Il paradosso: un processo di pre-cottura applicato al risone prima della raffinazione salva nutrienti che la raffinazione successiva eliminerebbe. La migrazione della tiamina e l'adesione dell'aleurone all'endosperma sono i meccanismi chiave."},
+      {n:139, type:"vf", q:"La parziale cottura della parboilizzazione inibisce la lipasi, causa dell'irrancidimento; ne consegue che il riso parboiled ha una shelf-life maggiore di un riso integrale non trattato, a parità di altre condizioni di stoccaggio.", correct:true, exp:"L'inibizione della lipasi tramite cottura parziale prolunga la shelf-life. Un riso integrale non trattato conserva la lipasi attiva, quindi a parità di altre condizioni si rancidirebbe più rapidamente."},
+      {n:140, type:"mc", q:"La sequenza corretta delle fasi agronomiche del riso è:", opts:["Concimazione → Aratura → Erpicatura → Sommersione → Semina → Asciutta → Maturazione → Raccolto.","Aratura (fine inverno) → Concimazione (fine marzo) → Erpicatura, livellamento e sommersione → Semina (fine marzo - maggio) → Asciutta (15-20 giorni dopo) → Maturazione → Raccolto (settembre/ottobre).","Semina → Aratura → Asciutta → Sommersione → Concimazione → Raccolto.","Aratura → Sommersione → Maturazione → Erpicatura → Concimazione → Raccolto."], correct:1, exp:"L'ordine corretto: aratura (fine inverno), concimazione (fine marzo), erpicatura/livellamento/sommersione, semina (fine marzo - maggio), asciutta (15-20 giorni dopo la semina), maturazione, raccolto (settembre-ottobre)."},
+      {n:141, type:"mc", q:"Il riso era conosciuto in Italia «molto prima» della sua coltivazione (1390, venduto come spezia); la prima coltivazione documentata risale al 1475 (lettera Sforza). Quale conclusione è più solida?", opts:["La «scoperta» del riso e il suo «addomesticamento» colturale sono fenomeni distinti e sfasati nel tempo: la prima precede di quasi un secolo l'introduzione effettiva della coltivazione.","Il riso era già coltivato in Italia nel 1390.","Il riso è entrato in Italia direttamente dall'Asia, senza passare per il Mediterraneo arabo.","La lettera di Galeazzo Maria Sforza dimostra che il riso fu introdotto solo nel 1475."], correct:0, exp:"Due fatti distinti: presenza del riso in Italia dal 1390 come spezia/farmaco (commercianti arabi); prima coltivazione documentata nel 1475 (lettera Sforza). Sono fenomeni sfasati di quasi un secolo."},
+      {n:142, type:"mc", q:"Nel 1700 le risaie milanesi coprivano oltre 20.000 ettari; un secolo e mezzo dopo, le sole risaie del vercellese ne coprivano 30.000. Quale interpretazione tecnico-economica è più coerente?", opts:["La risicoltura italiana ha conosciuto uno spostamento del baricentro produttivo, con un'intensificazione «provinciale» (Vercelli) capace nel XIX secolo di superare l'estensione che, un secolo e mezzo prima, era propria di un'intera area come quella milanese.","Le risaie italiane sono diminuite nell'Ottocento.","Le risaie del vercellese sono sempre state preminenti.","I due dati si contraddicono e dimostrano errori di archivio."], correct:0, exp:"Lo spostamento del baricentro produttivo verso il «triangolo d'oro» Pavia-Vercelli-Novara è evidente: nel XIX sec. una sola provincia (Vercelli) superò i 20.000 ettari dell'intera area milanese di un secolo e mezzo prima."},
+      {n:143, type:"vf", q:"Poiché l'endosperma costituisce oltre l'80% della cariosside ma è povero di minerali, mentre crusca, germe e strato aleuronico sono piccoli ma molto ricchi di micronutrienti, una raffinazione spinta del riso comporta una perdita relativa di micronutrienti molto maggiore di quanto una semplice analisi del peso lordo eliminato lascerebbe supporre.", correct:true, exp:"Endosperma > 80% del peso ma povero di micronutrienti; aleurone, germe, crusca: piccoli ma molto densi nutrizionalmente. L'asportazione percentualmente piccola in peso elimina percentualmente molto in micronutrienti."},
+      {n:144, type:"mc", q:"Vuoi acquistare un riso di varietà Roma (scheda: lunghezza 7 mm, larghezza 3,1 mm). Il sacco riporta solo «Lungo A». Quale sarà il rapporto L/L e in quale categoria UE rientra esattamente?", opts:["L/L = 2,3 (rientra nella categoria UE Lungo A: lunghezza > 6,0 mm e rapporto > 2 ed inferiore a 3).","L/L = 1,7 e rientra nella categoria Tondo.","L/L = 3,1 e rientra nella categoria Lungo B.","L/L = 1,6 e rientra nella categoria Medio."], correct:0, exp:"Roma: 7 mm ÷ 3,1 mm ≈ 2,26 ≈ 2,3. Lunghezza > 6 mm e ratio compreso tra 2 e 3 → Lungo A."},
+      {n:145, type:"mc", q:"Le slide affermano che lo stoccaggio del riso «stagionato» migliora le qualità organolettiche in cottura. Quale principio comune si può estrarre confrontando stagionatura e parboilizzazione?", opts:["Le lavorazioni post-raccolta del riso (essiccazione, stagionatura, parboiling) hanno tutte come effetto un miglioramento delle performance di cottura, anche quando — come nel parboiling — comportano la cessione parziale di valori nutritivi a fasi successive.","Lo stoccaggio peggiora sempre le qualità del prodotto.","La stagionatura sostituisce la sbiancatura.","Solo i risi parboiled possono essere stagionati."], correct:0, exp:"Il principio comune: lavorazioni post-raccolta = miglioramento per la cottura, pur con trade-off diversi. Il parboiling migliora performance di cottura a costo di una pre-cottura; la stagionatura migliora le qualità organolettiche attraverso il tempo."},
+    ]
+  },
+  {
+    title: "Tecniche di Cottura: Analisi e Principi",
+    subtitle: "Capitolo 8 (Avanzato) — Principi termici, diagnosi di errori, confronti",
+    advanced: true,
+    qs: [
+      {n:146, type:"mc", q:"Stai cuocendo una pentola d'acqua sul fornello a gas. Quale ricostruzione tecnica dei principi di trasmissione del calore è la più completa?", opts:["Solo conduzione, dalla fiamma all'acqua attraverso il fondo della pentola.","Solo convezione, perché l'acqua è un fluido.","Irradiamento e conduzione dalla fiamma al fondo della pentola; conduzione dal fondo della pentola all'acqua; convezione interna all'acqua. Le tecniche di cottura raramente operano per un solo principio.","Solo irradiamento dalla fiamma all'acqua."], correct:2, exp:"Scaldare una pentola d'acqua sul fornello a gas comprende: irradiamento e conduzione dalla fiamma al fondo della pentola, conduzione dal fondo all'acqua, convezione nell'acqua. Le cotture raramente operano per un solo principio."},
+      {n:147, type:"mc", q:"Ti propongono di descrivere la stufatura come «cottura estrattiva e parzialmente concentrativa». Quale spiegazione tecnica giustifica meglio questo doppio carattere?", opts:["È estrattiva perché l'acqua è in ebollizione, concentrativa perché si formano colorazioni di Maillard.","È a calore umido (entro i 100°C, in ambiente saturo della stessa umidità del prodotto): l'ambiente si arricchisce dei composti aromatici rilasciati (estrazione), mentre la limitata dispersione del vapore preserva sapori e umidità del prodotto (concentrazione). La stufatura è sia estrattiva sia concentrativa.","È sempre concentrativa, mai estrattiva.","Funziona solo sotto i 65°C."], correct:1, exp:"La stufatura è a calore umido entro i 100°C: l'ambiente si arricchisce dei composti aromatici rilasciati (estrazione), mentre la limitata dispersione del vapore preserva sapori e umidità (concentrazione). Le slide indicano esplicitamente che è sia estrattiva sia concentrativa."},
+      {n:148, type:"mc", q:"Un cuoco affoga una quenelle di pesce a 65-80°C. Per errore alza la temperatura a 100°C: l'ebollizione vivace disgrega la farcia. Qual è la ragione tecnica corretta?", opts:["Sopra i 100°C parte la reazione di Maillard, che rovina la farcia.","L'affogatura opera a 65°/80°C proprio per ridurre i moti convettivi e la turbolenza, in modo da non danneggiare prodotti delicati e cedevoli; a 100°C la convezione vigorosa dell'acqua bollente disgrega facilmente la quenelle.","Sopra gli 80°C l'amido si gelifica troppo.","È un fenomeno casuale, non spiegabile tecnicamente."], correct:1, exp:"L'affogatura opera a 65°/80°C per ridurre i moti convettivi e la turbolenza, adatta a quenelle, uova sgusciate, pesci. A 100°C la convezione vigorosa dell'acqua bollente disgrega facilmente prodotti delicati."},
+      {n:149, type:"vf", q:"Anche se la cottura al vapore è classificata come tecnica a calore umido e concentrativa, la sua efficacia dipende paradossalmente dalla bassa densità del vapore rispetto all'acqua: il minor numero di urti tra molecole superficiali è compensato dal fatto che ogni molecola di vapore trasferisce più energia (temperatura più elevata di quella dell'acqua in ebollizione).", correct:true, exp:"Il vapore, pur essendo meno denso dell'acqua liquida e quindi venendo a contatto meno frequentemente con il cibo, compensa questa minor efficacia con una maggior energia per molecola (temperatura più elevata dell'acqua in ebollizione)."},
+      {n:150, type:"mc", q:"Devi cuocere ortaggi mantenendo intatta la maggior parte dei nutrienti idrosolubili. Confrontando bollitura e cottura al vapore, qual è la conclusione più corretta?", opts:["La bollitura è migliore perché l'acqua bollente «sigilla» le molecole.","La cottura al vapore è preferibile, perché le molecole degli alimenti rimangono al loro interno senza disperdersi nell'acqua, fenomeno tipico invece della bollitura.","Sono equivalenti, perché entrambe avvengono a 100°C.","Solo la frittura conserva i nutrienti."], correct:1, exp:"Il vantaggio del vapore: le molecole degli alimenti rimangono al loro interno, senza disperdersi nell'acqua come avviene nella bollitura. Per nutrienti idrosolubili, il vapore è superiore."},
+      {n:151, type:"mc", q:"Brasi un pezzo di guanciale di manzo in vino rosso, fondo bruno, mirepoix e spezie. A fine cottura, la carne ha sapori molto complessi e il liquido è meno concentrato di sapore di carne di quanto ti aspettassi. Qual è la spiegazione tecnica più completa?", opts:["La carne ha rilasciato troppi liquidi.","La brasatura è una cottura «mista» in due tempi: dopo la rosolatura iniziale (concentrativa, Maillard), nella seconda fase opera l'osmosi, che fa passare nella carne le molecole aromatiche del liquido, mentre gli aromi della carne passano solo parzialmente al liquido fino a un equilibrio di concentrazione.","Il fondo bruno ha denaturato il glutine della carne.","È un errore di cottura: avresti dovuto bollire la carne."], correct:1, exp:"La brasatura è mista in due tempi; nella seconda fase l'osmosi fa passare nella carne le molecole aromatiche del liquido, mentre gli aromi della carne passano solo parzialmente al liquido fino a equilibrio. Il liquido è meno «di carne» perché il flusso netto è diretto verso la carne."},
+      {n:152, type:"mc", q:"Friggi a 160°C una panatura: il prodotto è unto e poco croccante. Ripeti a 220°C: la panatura si brucia mentre l'interno è ancora freddo. Qual è la lettura corretta?", opts:["A 160°C il cibo si impregna d'olio (sotto la temperatura tipica di frittura, ~180°C); a 220°C si rischia di bruciare velocemente, anche perché ci si avvicina al punto di fumo dell'olio. La temperatura di frittura deve essere centrata, e l'olio scelto deve avere un punto di fumo ben superiore alla temperatura di lavoro.","È un errore della panatura, non dell'olio.","A 160°C la frittura è impossibile.","Sopra i 200°C l'olio non trasferisce più calore."], correct:0, exp:"A temperature più basse il cibo si impregna d'olio; a temperature più alte rischia di bruciare velocemente. La temperatura tipica è ~180°C e l'olio deve avere punto di fumo ben superiore alla temperatura di lavoro."},
+      {n:153, type:"mc", q:"Un cuoco usa olio di soia (ricco di polinsaturi) per friggere a ciclo continuo per 8 ore. Un secondo cuoco usa olio di arachidi (ricco di acido oleico, monoinsaturo). A parità di altre condizioni:", opts:["L'olio di soia si degrada più rapidamente dell'olio di arachidi: gli oli ricchi di polinsaturi si ossidano più velocemente di quelli ricchi di monoinsaturi.","L'olio di arachidi si degrada più rapidamente.","I due oli si comportano in modo identico.","Solo l'olio di mais può essere usato per fritture prolungate."], correct:0, exp:"Gli oli ricchi di polinsaturi (mais, soia) si degradano più rapidamente di quelli ricchi di monoinsaturi (oliva, nocciole, arachidi, in prevalenza composti da acido oleico)."},
+      {n:154, type:"vf", q:"Quando un olio raggiunge il punto di fumo, si verifica il distacco della glicerina dagli acidi grassi, con formazione di fumi tossici (tra cui acroleina); l'olio in quel punto è da considerarsi compromesso e va sostituito.", correct:true, exp:"Il punto di fumo è la temperatura a cui la glicerina si stacca dagli acidi grassi e si producono fumi tossici contenenti sostanze nocive come l'acroleina. Un olio in tale stato è chimicamente compromesso."},
+      {n:155, type:"mc", q:"Confronta arrostitura in casseruola e arrostitura in padella. Quali principi di trasmissione del calore operano in ciascuna tecnica e quale conclusione ne segue?", opts:["In casseruola operano conduzione (fondo) e vapore all'interno della stessa casseruola, mentre in padella opera la sola conduzione del fondo: la casseruola permette un ambiente parzialmente umido (vapore) che la padella non offre.","Sono identiche per principi di trasmissione.","Solo la padella usa irradiamento.","Solo la casseruola raggiunge i 140°C necessari alla Maillard."], correct:0, exp:"In casseruola: conduzione (fondo) e vapore all'interno; in padella: sola conduzione del fondo. La casseruola integra il vapore proveniente dall'umidità del prodotto in un ambiente parzialmente chiuso — variabile assente nella padella."},
+      {n:156, type:"mc", q:"Hai bollito delle zucchine, le scoli e poi le ripassi in padella con poco fondo bruno e burro, facendo addensare il liquido fino a coprirle uniformemente. Tecnicamente hai eseguito:", opts:["Una stufatura in due tempi.","Una glassatura: tecnica che spesso segue un'altra cottura e che ultima la cottura concentrando i liquidi fino a una consistenza che ammanta la preparazione. Le glasse possono partire da fondi di cucina, sughi di cottura o sciroppi di zucchero.","Una brasatura.","Una cottura per affogamento."], correct:1, exp:"La glassatura ultima la cottura concentrando i liquidi fino a una consistenza che ammanta la preparazione; spesso segue altre cotture (verdure sbianchite, carni arrostite). Esattamente la sequenza descritta nella domanda."},
+      {n:157, type:"mc", q:"Le slide sottolineano che la bollitura, pur non superando i 100°C, è un metodo di cottura «molto efficace». Quale ragionamento tecnico giustifica questa affermazione?", opts:["Perché la bollitura è di fatto una concentrazione mascherata.","Perché tutta la superficie del cibo è a contatto con il mezzo (acqua), che è denso e turbolento; le molecole d'acqua trasferiscono la loro energia in modo rapido e continuo, e il punto di ebollizione è una temperatura di riferimento riproducibile e stabile.","Perché l'acqua attiva la reazione di Maillard.","Perché l'acqua sopra i 100°C cambia stato."], correct:1, exp:"L'intera superficie del cibo è a contatto con il mezzo denso e turbolento; le molecole d'acqua trasferiscono energia in modo rapido e continuo. Il punto di ebollizione è una temperatura di riferimento stabile e facilmente riconoscibile."},
+      {n:158, type:"mc", q:"Cuoci lo stesso ingrediente in tre modi: (1) in acqua bollente, (2) al vapore, (3) per stufatura. Quale gerarchia delle temperature massime è coerente con le slide?", opts:["Stufatura > Bollitura > Vapore.","Bollitura = Stufatura = Vapore (tutte uguali).","Vapore > Bollitura; Stufatura ≤ 100°C: il vapore raggiunge una temperatura maggiore di quella dell'acqua in ebollizione, la bollitura è a 100°C, la stufatura è mantenuta entro i 100°C.","Bollitura > Vapore > Stufatura."], correct:2, exp:"Vapore: temperatura più elevata dell'acqua in ebollizione. Bollitura: a 100°C esatti. Stufatura: sempre entro i 100°C per limitare la disidratazione e evitare Maillard."},
+      {n:159, type:"vf", q:"Poiché la stufatura è mantenuta entro i 100°C per limitare la disidratazione del prodotto, è tecnicamente impossibile ottenere su un alimento stufato i colori e gli aromi tipici della reazione di Maillard, che richiede ≥ 140°/145°C.", correct:true, exp:"La temperatura della stufatura è sempre sotto i 100°C, ben al di sotto della soglia 140°/145°C richiesta per la reazione di Maillard. È un vincolo strutturale della tecnica, non un'eventualità da evitare."},
+      {n:160, type:"mc", q:"Quale tecnica di cottura, tra quelle viste, sintetizza nel suo principio operativo sia la dimensione fisica (osmosi) che quella temporale (due fasi distinte)?", opts:["La frittura per immersione.","La cottura al vapore.","La brasatura: prima fase concentrativa con rosolatura a fuoco vivo (sviluppo Maillard), seconda fase estrattiva, più lunga, in presenza di liquidi, in cui l'osmosi opera lo scambio di componenti aromatiche tra alimento e mezzo.","La bollitura."], correct:2, exp:"La brasatura è l'unica tecnica che si articola in due fasi nominate (concentrativa, poi estrattiva) e che richiede esplicitamente l'osmosi come meccanismo di trasferimento aromatico tra alimento e mezzo. Le altre tecniche operano in fase singola."},
+    ]
   }
 ];
 
 // ═══════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════
-const STORAGE_KEY = 'quiz_cucina_v2';
-let state = { answers: {}, marked: {} }; // answers: {n: {chosen, correct}} marked: {n: bool}
+const STORAGE_KEY = 'quiz_cucina_v3';
+let state = { answers: {}, marked: {} };
 
 function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
@@ -690,19 +872,44 @@ function buildQuiz() {
   chapters.forEach((ch, ci) => {
     const chDiv = document.createElement('div');
     chDiv.className = 'chapter-section';
-    chDiv.innerHTML = `
+
+    // ── Section break banner (before first advanced chapter) ──
+    if (ch.sectionBreak) {
+      const totalBase = chapters.filter(c => !c.advanced).reduce((a,c) => a+c.qs.length, 0);
+      const totalAdv  = chapters.filter(c =>  c.advanced).reduce((a,c) => a+c.qs.length, 0);
+      const divHtml = `
+        <div class="section-divider">
+          <div class="section-divider-banner">
+            <div class="adv-badge">⚡ Quiz Avanzato</div>
+            <div class="adv-title">Ragionamento, Analisi e Applicazione</div>
+            <div class="adv-subtitle">Questo quiz NON contiene domande di pura memorizzazione: richiede di ragionare sui principi tecnici, confrontare tecniche e ingredienti, applicare le nozioni a casi pratici e diagnosticare errori. Tutte le opzioni errate sono plausibili — leggi attentamente.</div>
+            <div class="adv-stats">
+              <div class="adv-stat"><span class="adv-stat-num">${totalAdv}</span>&nbsp;domande avanzate</div>
+              <div class="adv-stat"><span class="adv-stat-num">4</span>&nbsp;capitoli</div>
+              <div class="adv-stat"><span class="adv-stat-num">${totalBase + totalAdv}</span>&nbsp;domande totali</div>
+            </div>
+          </div>
+        </div>`;
+      chDiv.insertAdjacentHTML('beforeend', divHtml);
+    }
+
+    const isAdv = !!ch.advanced;
+    const lineClass = isAdv ? 'chapter-line adv' : 'chapter-line';
+    const labelClass = isAdv ? 'chapter-label adv' : 'chapter-label';
+    const capLabel = isAdv ? `Capitolo ${ci+1} — Avanzato` : `Capitolo ${ci+1}`;
+
+    chDiv.insertAdjacentHTML('beforeend', `
       <div class="chapter-header">
-        <div class="chapter-line"></div>
-        <div class="chapter-label">Capitolo ${ci+1}</div>
-        <div class="chapter-line"></div>
+        <div class="${lineClass}"></div>
+        <div class="${labelClass}">${capLabel}</div>
+        <div class="${lineClass}"></div>
       </div>
       <div class="chapter-title">${ch.title}</div>
       <div class="chapter-subtitle">${ch.subtitle}</div>
-    `;
+    `);
 
     ch.qs.forEach(q => {
       const card = document.createElement('div');
-      card.className = 'question-card';
       card.id = `q-${q.n}`;
       card.dataset.n = q.n;
 
@@ -714,9 +921,7 @@ function buildQuiz() {
 
       if (q.type === 'mc') {
         optionsHtml = `<div class="options">` + q.opts.map((opt, i) => {
-          let cls = '';
-          let icon = '';
-          let disabled = '';
+          let cls = '', icon = '', disabled = '';
           if (ans) {
             disabled = 'disabled';
             if (i === q.correct) { cls = 'correct'; icon = '<span class="opt-icon">✓</span>'; }
@@ -747,32 +952,28 @@ function buildQuiz() {
         const icon = ans.correct ? '✅' : '❌';
         let correctLabel = '';
         if (!ans.correct) {
-          if (q.type === 'mc') {
-            correctLabel = `<span class="correct-answer">Risposta corretta: ${labels[q.correct]}) ${q.opts[q.correct]}</span>`;
-          } else {
-            correctLabel = `<span class="correct-answer">Risposta corretta: ${q.correct ? 'Vero' : 'Falso'}</span>`;
-          }
+          if (q.type === 'mc') correctLabel = `<span class="correct-answer">Risposta corretta: ${labels[q.correct]}) ${q.opts[q.correct]}</span>`;
+          else correctLabel = `<span class="correct-answer">Risposta corretta: ${q.correct ? 'Vero' : 'Falso'}</span>`;
         }
         feedbackHtml = `<div class="feedback ${fbCls} show">
           <strong>${icon} ${ans.correct ? 'Corretto!' : 'Sbagliato!'}</strong>
-          ${correctLabel}
-          ${q.exp}
+          ${correctLabel}${q.exp}
         </div>`;
       }
 
       let stampHtml = '';
-      if (ans) {
-        stampHtml = `<span class="answered-stamp ${ans.correct?'ok':'ko'}">${ans.correct?'✓ Corretto':'✗ Sbagliato'}</span>`;
-      }
+      if (ans) stampHtml = `<span class="answered-stamp ${ans.correct?'ok':'ko'}">${ans.correct?'✓ Corretto':'✗ Sbagliato'}</span>`;
 
-      let cardCls = '';
-      if (ans) cardCls = ans.correct ? 'answered-correct' : 'answered-wrong';
+      let cardCls = 'question-card';
+      if (isAdv) cardCls += ' adv-card';
+      if (ans) cardCls += ans.correct ? ' answered-correct' : ' answered-wrong';
       if (isMarked) cardCls += ' marked';
 
-      card.className = `question-card ${cardCls}`;
+      const numClass = isAdv ? 'q-number adv' : 'q-number';
+      card.className = cardCls;
       card.innerHTML = `
         <div class="q-meta">
-          <span class="q-number">Dom. ${q.n}</span>
+          <span class="${numClass}">Dom. ${q.n}</span>
           <span class="q-type-badge">${typeLabel}</span>
           ${stampHtml}
           <button class="mark-btn ${isMarked?'active':''}" onclick="toggleMark(${q.n})" title="Segna per revisione">🔖</button>
@@ -827,12 +1028,14 @@ function updateCard(n) {
   const ans = state.answers[n];
   const labels = ['A','B','C','D'];
   const isMarked = state.marked[n];
+  const isAdv = chapters.find(c => c.qs.some(x => x.n === n))?.advanced;
 
-  let cardCls = ans ? (ans.correct ? 'answered-correct' : 'answered-wrong') : '';
+  let cardCls = 'question-card';
+  if (isAdv) cardCls += ' adv-card';
+  if (ans) cardCls += ans.correct ? ' answered-correct' : ' answered-wrong';
   if (isMarked) cardCls += ' marked';
-  card.className = `question-card ${cardCls}`;
+  card.className = cardCls;
 
-  // Update stamp
   const existing = card.querySelector('.answered-stamp');
   if (existing) existing.remove();
   if (ans) {
@@ -842,52 +1045,32 @@ function updateCard(n) {
     card.querySelector('.q-meta').insertBefore(stamp, card.querySelector('.mark-btn'));
   }
 
-  // Update buttons
   if (q.type === 'mc') {
     card.querySelectorAll('.option-btn').forEach((btn, i) => {
       btn.disabled = true;
       btn.querySelector('.opt-icon')?.remove();
-      if (i === q.correct) {
-        btn.classList.add('correct');
-        btn.innerHTML += '<span class="opt-icon">✓</span>';
-      } else if (ans && i === ans.chosen && !ans.correct) {
-        btn.classList.add('wrong');
-        btn.innerHTML += '<span class="opt-icon">✗</span>';
-      }
+      if (i === q.correct) { btn.classList.add('correct'); btn.innerHTML += '<span class="opt-icon">✓</span>'; }
+      else if (ans && i === ans.chosen && !ans.correct) { btn.classList.add('wrong'); btn.innerHTML += '<span class="opt-icon">✗</span>'; }
     });
   } else {
     const [vBtn, fBtn] = card.querySelectorAll('.vf-btn');
     vBtn.disabled = fBtn.disabled = true;
-    if (q.correct === true) {
-      vBtn.classList.add('correct');
-      if (ans && !ans.correct) fBtn.classList.add('wrong');
-    } else {
-      fBtn.classList.add('correct');
-      if (ans && !ans.correct) vBtn.classList.add('wrong');
-    }
+    if (q.correct === true) { vBtn.classList.add('correct'); if (ans && !ans.correct) fBtn.classList.add('wrong'); }
+    else { fBtn.classList.add('correct'); if (ans && !ans.correct) vBtn.classList.add('wrong'); }
   }
 
-  // Add feedback
   let fb = card.querySelector('.feedback');
-  if (!fb) {
-    fb = document.createElement('div');
-    fb.className = 'feedback';
-    card.appendChild(fb);
-  }
+  if (!fb) { fb = document.createElement('div'); fb.className = 'feedback'; card.appendChild(fb); }
   const fbCls = ans.correct ? 'correct-fb' : 'wrong-fb';
   const icon = ans.correct ? '✅' : '❌';
   let correctLabel = '';
   if (!ans.correct) {
-    if (q.type === 'mc') {
-      correctLabel = `<span class="correct-answer">Risposta corretta: ${labels[q.correct]}) ${q.opts[q.correct]}</span>`;
-    } else {
-      correctLabel = `<span class="correct-answer">Risposta corretta: ${q.correct ? 'Vero' : 'Falso'}</span>`;
-    }
+    if (q.type === 'mc') correctLabel = `<span class="correct-answer">Risposta corretta: ${labels[q.correct]}) ${q.opts[q.correct]}</span>`;
+    else correctLabel = `<span class="correct-answer">Risposta corretta: ${q.correct ? 'Vero' : 'Falso'}</span>`;
   }
   fb.className = `feedback ${fbCls} show`;
   fb.innerHTML = `<strong>${icon} ${ans.correct ? 'Corretto!' : 'Sbagliato!'}</strong>${correctLabel}${q.exp}`;
 
-  // Animate
   card.style.transition = 'transform 0.2s';
   card.style.transform = 'scale(1.01)';
   setTimeout(() => { card.style.transform = ''; }, 200);
@@ -901,15 +1084,8 @@ function toggleMark(n) {
   saveState();
   const card = document.getElementById(`q-${n}`);
   const btn = card.querySelector('.mark-btn');
-  if (state.marked[n]) {
-    card.classList.add('marked');
-    btn.classList.add('active');
-    showToast('🔖 Domanda segnata per revisione');
-  } else {
-    card.classList.remove('marked');
-    btn.classList.remove('active');
-    showToast('Segnalibro rimosso');
-  }
+  if (state.marked[n]) { card.classList.add('marked'); btn.classList.add('active'); showToast('🔖 Domanda segnata per revisione'); }
+  else { card.classList.remove('marked'); btn.classList.remove('active'); showToast('Segnalibro rimosso'); }
 }
 
 // ═══════════════════════════════════════════
@@ -938,7 +1114,6 @@ function filterQuestions(mode) {
     if (mode === 'wrong') show = state.answers[n] && !state.answers[n].correct;
     card.classList.toggle('hidden', !show);
   });
-  // Hide/show chapter headers
   document.querySelectorAll('.chapter-section').forEach(sec => {
     const anyVisible = [...sec.querySelectorAll('.question-card')].some(c => !c.classList.contains('hidden'));
     sec.style.display = anyVisible ? '' : 'none';
@@ -963,17 +1138,25 @@ function showResults() {
   else if (pct < 70) { emoji = '📖'; msg = 'Buon lavoro, ma puoi migliorare!'; scoreClass = 'ok'; }
   else if (pct < 90) { emoji = '⭐'; msg = 'Ottimo risultato!'; scoreClass = 'good'; }
 
-  let chapterBreakdown = chapters.map((ch, ci) => {
-    const chCorrect = ch.qs.filter(q => state.answers[q.n]?.correct).length;
+  // Base chapters
+  const baseChapters = chapters.filter(c => !c.advanced);
+  const advChapters  = chapters.filter(c =>  c.advanced);
+
+  function chapterRow(ch, ci, isAdv) {
+    const chCorrect  = ch.qs.filter(q => state.answers[q.n]?.correct).length;
     const chAnswered = ch.qs.filter(q => state.answers[q.n]).length;
-    const chTotal = ch.qs.length;
     const chPct = chAnswered > 0 ? Math.round(chCorrect/chAnswered*100) : 0;
     const color = chPct >= 80 ? '#5C7A5C' : chPct >= 60 ? '#B8860B' : '#C0392B';
-    return `<div class="results-chapter">
-      <div>Cap. ${ci+1} — ${ch.title}</div>
+    const rowClass = isAdv ? 'results-chapter adv-chapter' : 'results-chapter';
+    const label = isAdv ? `Av.${ci+1} — ${ch.title}` : `Cap.${ci+1} — ${ch.title}`;
+    return `<div class="${rowClass}">
+      <div>${label}</div>
       <span class="ch-score" style="color:${color}">${chCorrect}/${chAnswered} (${chAnswered>0?chPct+'%':'—'})</span>
     </div>`;
-  }).join('');
+  }
+
+  const baseRows = baseChapters.map((c,i) => chapterRow(c, i, false)).join('');
+  const advRows  = advChapters.map((c,i) => chapterRow(c, i, true)).join('');
 
   const box = document.getElementById('results-box');
   box.innerHTML = `
@@ -987,8 +1170,10 @@ function showResults() {
       <div class="breakdown-item yellow"><span class="bi-num">${unanswered}</span><span class="bi-label">Non risposte</span></div>
       <div class="breakdown-item"><span class="bi-num">${Object.values(state.marked).filter(Boolean).length}</span><span class="bi-label">Segnate 🔖</span></div>
     </div>
-    <div style="margin-bottom:8px;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:#aaa;">Per capitolo</div>
-    ${chapterBreakdown}
+    <div class="results-section-label">Quiz Base — Capitoli 1-4</div>
+    ${baseRows}
+    <div class="results-section-label adv">⚡ Quiz Avanzato — Capitoli 5-8</div>
+    ${advRows}
     ${unanswered > 0 ? `<div style="margin-top:12px;padding:12px;background:#FFF8E1;border-radius:8px;font-size:0.82rem;color:#7a5c00;text-align:center;">💡 Hai ancora <strong>${unanswered}</strong> domande a cui non hai risposto!</div>` : ''}
     <div class="results-actions">
       <button class="res-btn secondary" onclick="closeResults()">Chiudi</button>
